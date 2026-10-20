@@ -176,6 +176,11 @@ body.archive-open .sitebar{visibility:hidden;pointer-events:none}
 .runner-leg-right{left:10px}
 @keyframes runnerLegs{from{transform:rotate(34deg)}to{transform:rotate(-34deg)}}
 @media(prefers-reduced-motion:reduce){.runner-leg{animation:none;transform:rotate(12deg)}}
+.button-primary:has(.runner-icon),.button-soft:has(.runner-icon){display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;line-height:1.2}
+.button-primary .runner-icon,.button-soft .runner-icon{margin:0;vertical-align:middle}
+.button-primary .runner-icon{margin-left:0!important}
+.runner-leg{animation-duration:.72s}
+@keyframes runnerLegs{from{transform:rotate(22deg)}to{transform:rotate(-22deg)}}
 </style>
 </head>
 <body>
