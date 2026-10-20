@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff7fa">
+  <title>Demo · Tấm vé hẹn hò của em</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#704253;--plum:#98516e;--rose:#d77f9c;--rose2:#f4cbd8;--cream:#fffaf7;--gold:#c49a61;--line:#efd8df;--shadow:0 26px 70px #75465b20}
+    *{box-sizing:border-box}html{min-height:100%;background:#fff7fa}body{margin:0;min-height:100svh;color:var(--ink);font-family:'Be Vietnam Pro',sans-serif;background:radial-gradient(ellipse at 12% 15%,#f8dce7aa,transparent 35%),radial-gradient(ellipse at 85% 82%,#f3e7d477,transparent 32%),linear-gradient(145deg,#fff8fb,#fff6f5 60%,#fdf8f1);overflow-x:hidden}
+    .grain{position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:radial-gradient(#b56b87 0.65px,transparent .7px);background-size:23px 23px;mask-image:linear-gradient(transparent,#000 15%,#000 85%,transparent);z-index:0}
+    .sparkles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}.sparkle{position:absolute;width:5px;height:5px;border-radius:50%;background:#d99ab0;opacity:.45;animation:twinkle 3.8s ease-in-out infinite}.sparkle:nth-child(1){left:9%;top:20%}.sparkle:nth-child(2){left:86%;top:16%;animation-delay:1s}.sparkle:nth-child(3){left:78%;top:72%;animation-delay:2s}.sparkle:nth-child(4){left:18%;top:83%;animation-delay:.5s}.sparkle:nth-child(5){left:53%;top:9%;animation-delay:1.4s}@keyframes twinkle{50%{opacity:.12;transform:scale(.55)}}
+    .topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;max-width:1120px;margin:auto;padding:24px 28px}.brand{font:700 13px 'Playfair Display',serif;letter-spacing:.18em;color:var(--plum)}.demo-pill{border:1px solid #eac6d3;border-radius:99px;padding:8px 13px;font-size:11px;letter-spacing:.1em;color:#a4687d;background:#ffffff91}
+    main{position:relative;z-index:1;min-height:calc(100svh - 76px);display:grid;place-items:center;padding:20px 22px 42px}.stage{width:min(100%,830px);min-height:550px;position:relative;display:grid;place-items:center}.intro,.revealed{width:min(100%,680px);text-align:center;transition:opacity .55s,transform .65s cubic-bezier(.2,.8,.2,1)}.intro h1{font:500 clamp(38px,6vw,67px)/1.08 'Playfair Display',serif;letter-spacing:-.035em;color:var(--plum);margin:14px auto 12px;max-width:650px}.eyebrow{font-size:11px;letter-spacing:.23em;text-transform:uppercase;color:#b7798e;font-weight:700}.intro p{font-size:14px;line-height:1.75;color:#916d7c;margin:0 0 23px}.envelope-button{position:relative;width:min(88vw,440px);height:270px;margin:0 auto 22px;border:0;background:transparent;cursor:pointer;perspective:800px;filter:drop-shadow(0 21px 23px #794b5a22);transition:transform .25s}.envelope-button:hover{transform:translateY(-5px) rotate(-.6deg)}.envelope-button:focus-visible,.choice:focus-visible,.btn:focus-visible,.icon-btn:focus-visible{outline:3px solid #d77f9c;outline-offset:5px}.env-body{position:absolute;inset:38px 0 0;border:1px solid #f0d4dd;border-radius:17px 17px 25px 25px;background:linear-gradient(145deg,#fffdfa,#f9e4e8 85%);overflow:hidden}.env-body:before,.env-body:after{content:"";position:absolute;bottom:-70px;width:54%;height:190px;background:linear-gradient(140deg,#f4ccd8,#fff3f5);border:1px solid #efc6d3}.env-body:before{left:-2%;transform:rotate(31deg)}.env-body:after{right:-2%;transform:rotate(-31deg)}.env-flap{position:absolute;z-index:2;left:0;right:0;top:38px;margin:auto;width:0;height:0;border-left:220px solid transparent;border-right:220px solid transparent;border-top:146px solid #edc3d0;filter:drop-shadow(0 3px 4px #a9667c20);transform-origin:50% 0;transition:transform .7s cubic-bezier(.2,.8,.2,1)}.seal{position:absolute;z-index:3;top:139px;left:50%;transform:translateX(-50%);width:57px;height:57px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ce879d,#b96883);box-shadow:0 8px 18px #9b587344;color:white;font-size:25px;transition:transform .4s}.hint{position:absolute;z-index:4;bottom:28px;left:0;right:0;font-size:12px;color:#9b6d7b;letter-spacing:.04em}.hint b{font-weight:600;color:var(--plum)}.intro.opening .env-flap{transform:rotateX(180deg)}.intro.opening .seal{transform:translateX(-50%) scale(.45);opacity:0}.intro.opening .env-body{animation:envOut .7s .28s forwards}@keyframes envOut{to{transform:scale(1.04);opacity:0}}
+    .revealed{position:absolute;inset:50% auto auto 50%;width:min(100%,730px);transform:translate(-50%,-47%) scale(.96);opacity:0;pointer-events:none}.revealed.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}.intro.hide{opacity:0;transform:translateY(-22px) scale(.97);pointer-events:none}.card{background:linear-gradient(135deg,#fffdfaee,#fff6f8ee);border:1px solid #f0d9e0;border-radius:28px;padding:clamp(23px,5vw,48px);box-shadow:var(--shadow);position:relative;overflow:hidden}.card:before{content:"";position:absolute;inset:10px;border:1px solid #f3e4dc;border-radius:21px;pointer-events:none}.card-head{position:relative;display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:25px;text-align:left}.card-head .eyebrow{line-height:1.5}.step{font-size:11px;color:#b5798c;letter-spacing:.12em;white-space:nowrap}.card h2{font:600 clamp(30px,5vw,49px)/1.12 'Playfair Display',serif;color:var(--plum);margin:0 auto 8px;max-width:590px}.sub{color:#997684;font-size:13px;line-height:1.7;margin:0 auto 24px;max-width:480px}
+    .choices{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 18px}.choice{min-height:116px;border:1px solid #ecd3dc;border-radius:19px;background:linear-gradient(160deg,#fff,#fff8fa);color:var(--ink);padding:12px 8px;cursor:pointer;transition:transform .24s,border-color .24s,box-shadow .24s,background .24s;position:relative}.choice:hover{transform:translateY(-4px);border-color:#d99ab0;box-shadow:0 12px 25px #9b58731b}.choice[aria-pressed="true"]{border-color:#d17d99;background:#fff0f4;box-shadow:0 0 0 3px #f6dce5}.choice .emoji{display:block;font-size:27px;margin:0 0 8px}.choice .name{font-size:11px;line-height:1.45;font-weight:600}.choice .pick{position:absolute;top:7px;right:8px;color:#b56c86;font-size:12px;opacity:0;transform:scale(.6);transition:.2s}.choice[aria-pressed="true"] .pick{opacity:1;transform:scale(1)}.selection-note{min-height:25px;color:#98677a;font-size:12px;margin:0 0 16px;transition:opacity .2s}.btn-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:99px;padding:13px 21px;background:linear-gradient(135deg,#a85f7d,#914865);color:white;font:600 12px 'Be Vietnam Pro',sans-serif;cursor:pointer;box-shadow:0 9px 22px #91486526;transition:transform .2s,box-shadow .2s,filter .2s}.btn:hover{transform:translateY(-2px);box-shadow:0 13px 25px #91486535;filter:saturate(1.1)}.btn.secondary{background:#fff8fa;color:#a45c79;border:1px solid #ebc8d4;box-shadow:none}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}.footnote{font-size:10px;color:#b08c98;margin-top:17px}
+    .ticket-wrap{display:grid;grid-template-columns:1fr 160px;gap:18px;align-items:stretch;text-align:left;margin:22px 0 19px;perspective:1000px}.ticket{position:relative;min-height:215px;padding:25px 27px;background:linear-gradient(120deg,#fffdf8,#fff4f1 70%,#fbeaf0);border:1px solid #dfc38e;border-radius:18px;box-shadow:0 14px 30px #8d61721a;overflow:hidden;animation:ticketIn .65s cubic-bezier(.2,.85,.25,1) both}.ticket:before,.ticket:after{content:"";position:absolute;top:50%;width:28px;height:28px;border-radius:50%;background:#fff8fa;border:1px solid #e9d5d2;transform:translateY(-50%)}.ticket:before{left:-15px}.ticket:after{right:-15px}.ticket:after{border-left:1px dashed #d7b779}.ticket .ticket-kicker{font-size:9px;letter-spacing:.2em;color:#ab8050;font-weight:700}.ticket h3{font:600 30px/1.15 'Playfair Display',serif;color:#87536a;margin:14px 0 7px}.ticket .ticket-desc{font-size:12px;line-height:1.7;color:#816371;margin:0;max-width:430px}.ticket-meta{display:flex;gap:26px;margin-top:17px}.meta-label{display:block;font-size:8px;letter-spacing:.15em;color:#b08561;margin-bottom:4px}.meta-value{font-size:10px;color:#704253;font-weight:600}.stub{border-radius:18px;border:1px dashed #d7b779;background:#fffaf4;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px 12px;animation:ticketIn .65s .08s both}.stub .heartseal{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#f5e5d3;color:#a67b49;font-size:22px;margin-bottom:12px}.stub span{font-size:8px;letter-spacing:.18em;color:#b08a62}.stub strong{font:700 15px 'Playfair Display',serif;color:#91566d;margin:6px 0}.stub small{font-size:9px;color:#a78c8b}.afterline{font:600 23px 'Dancing Script',cursive;color:#a15f7a;text-align:center;margin:5px 0 15px;animation:fadeUp .6s .4s both}@keyframes ticketIn{from{opacity:0;transform:translateY(14px) rotateX(7deg)}to{opacity:1;transform:none}}@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+    .toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:10;padding:12px 17px;border-radius:99px;background:#704253;color:#fff9fb;font-size:12px;box-shadow:0 10px 25px #70425330;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}.confetti{position:fixed;z-index:5;pointer-events:none;font-size:18px;left:var(--x);top:var(--y);animation:burst 1.3s ease-out forwards}@keyframes burst{to{transform:translate(var(--dx),var(--dy)) rotate(35deg) scale(.3);opacity:0}}
+    @media(max-width:600px){.topbar{padding:16px 17px}.stage{min-height:570px}.intro h1{font-size:clamp(36px,10vw,52px)}.envelope-button{height:235px;width:min(88vw,380px)}.env-flap{border-left-width:min(44vw,190px);border-right-width:min(44vw,190px);border-top-width:128px}.seal{top:126px}.card{border-radius:23px;padding:27px 18px}.card:before{inset:7px;border-radius:18px}.card-head{margin-bottom:20px}.choices{grid-template-columns:repeat(2,1fr);gap:9px}.choice{min-height:95px}.choice .emoji{font-size:24px;margin-bottom:5px}.ticket-wrap{grid-template-columns:1fr;gap:11px}.ticket{min-height:200px;padding:23px 22px}.stub{min-height:105px;flex-direction:row;gap:12px}.stub .heartseal{margin:0}.ticket h3{font-size:26px}.revealed{width:min(100%,530px)}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+    @media print{body{background:#fff}.topbar,.intro,.card-head,.sub,.choices,.selection-note,.btn-row,.footnote,.sparkles,.grain,.toast{display:none!important}main{min-height:0;padding:0}.stage{min-height:0}.revealed{position:static;transform:none!important;opacity:1!important;width:100%;pointer-events:auto}.card{box-shadow:none;border:0;padding:20px}.card:before{display:none}.ticket-wrap{margin:12px auto;max-width:760px}.afterline{margin-top:0}}
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div><div class="sparkles" aria-hidden="true"><i class="sparkle"></i><i class="sparkle"></i><i class="sparkle"></i><i class="sparkle"></i><i class="sparkle"></i></div>
+  <header class="topbar"><div class="brand">20·10 &nbsp; ♡ &nbsp; QUYỀN ĐẸP TRAI</div><div class="demo-pill">BẢN DEMO · VÉ HẸN HÒ</div></header>
+  <main>
+    <section class="stage" aria-live="polite">
+      <div class="intro" id="intro">
+        <div class="eyebrow">Một bất ngờ nhỏ dành riêng cho em</div>
+        <h1>Một buổi hẹn<br>chỉ có chúng mình.</h1>
+        <p>Anh đã giữ lại một tấm vé đặc biệt.<br>Chạm vào chiếc phong thư để khám phá nhé.</p>
+        <button class="envelope-button" id="openEnvelope" type="button" aria-label="Mở phong thư tình yêu">
+          <span class="env-body"></span><span class="env-flap"></span><span class="seal">♡</span>
+          <span class="hint"><b>Mở thư mời</b> &nbsp;·&nbsp; em chọn buổi hẹn mình thích nhé</span>
+        </button>
+        <div class="eyebrow" style="font-size:9px;letter-spacing:.17em">A LITTLE DATE, A LOT OF LOVE</div>
+      </div>
+      <section class="revealed" id="chooser" aria-hidden="true">
+        <div class="card">
+          <div class="card-head"><div class="eyebrow">Tấm vé đặc quyền · 20.10</div><div class="step">BƯỚC 01 / 02</div></div>
+          <h2>Buổi hẹn của em<br>mình đi đâu đây?</h2>
+          <p class="sub">Em chọn điều làm em vui nhất. Phần còn lại, để anh lo nhé ♡</p>
+          <div class="choices" role="group" aria-label="Chọn kiểu hẹn hò">
+            <button class="choice" data-date="Một bữa tối món em thích" data-icon="🍰" type="button" aria-pressed="false"><span class="pick">♡</span><span class="emoji">🍽️</span><span class="name">Món em thích</span></button>
+            <button class="choice" data-date="Một buổi xem phim thật chill" data-icon="🎬" type="button" aria-pressed="false"><span class="pick">♡</span><span class="emoji">🎬</span><span class="name">Xem phim cùng nhau</span></button>
+            <button class="choice" data-date="Một buổi dạo chơi và ngắm hoàng hôn" data-icon="🌷" type="button" aria-pressed="false"><span class="pick">♡</span><span class="emoji">🌇</span><span class="name">Dạo chơi hoàng hôn</span></button>
+            <button class="choice" data-date="Một buổi hẹn bất ngờ do anh chuẩn bị" data-icon="🎁" type="button" aria-pressed="false"><span class="pick">♡</span><span class="emoji">🎁</span><span class="name">Để anh tạo bất ngờ</span></button>
+          </div>
+          <p class="selection-note" id="selectionNote">Chọn một chiếc trước khi mở vé nha ✨</p>
+          <div class="btn-row"><button class="btn" id="revealTicket" type="button" disabled>Mở tấm vé của em&nbsp; ↗</button></div>
+          <div class="footnote">Không cần chọn ngày ngay bây giờ · món quà này có hiệu lực bất cứ khi nào em muốn</div>
+        </div>
+      </section>
+      <section class="revealed" id="ticketScene" aria-hidden="true">
+        <div class="card">
+          <div class="card-head"><div class="eyebrow">Đã xác nhận · Dành riêng cho em</div><div class="step">VÉ SỐ 2010 · VIP</div></div>
+          <h2>Tấm vé hẹn hò<br>của chúng mình ♡</h2>
+          <p class="sub">Một lời hẹn nhỏ để dành cho ngày em muốn được yêu chiều.</p>
+          <div class="ticket-wrap">
+            <article class="ticket"><div class="ticket-kicker">EXCLUSIVE LOVE PASS &nbsp;·&nbsp; 20.10</div><h3 id="ticketDate">Một buổi hẹn thật ngọt ngào</h3><p class="ticket-desc">Anh chuẩn bị, em chỉ cần đến và vui vẻ. Đổi được bằng một cái ôm thật lâu, một buổi hẹn trọn vẹn và thật nhiều thương yêu.</p><div class="ticket-meta"><div><span class="meta-label">NGƯỜI NHẬN</span><span class="meta-value">Công chúa của anh</span></div><div><span class="meta-label">HIỆU LỰC</span><span class="meta-value">Bất cứ khi nào em muốn</span></div></div></article>
+            <aside class="stub"><div class="heartseal">♡</div><div><span>MADE WITH LOVE</span><strong>QUYỀN ĐẸP TRAI</strong><small>Không giới hạn những cái ôm</small></div></aside>
+          </div>
+          <div class="afterline">Anh mong được đi cùng em ♡</div>
+          <div class="btn-row"><button class="btn" id="saveTicket" type="button">Lưu vé / In vé&nbsp; ↓</button><button class="btn secondary" id="startAgain" type="button">Chọn lại buổi hẹn</button></div>
+          <div class="footnote">Khi gửi link thật, lựa chọn của em có thể được lưu thành lời nhắn để anh chuẩn bị buổi hẹn.</div>
+        </div>
+      </section>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+    (()=>{
+      const intro=document.getElementById('intro'), openButton=document.getElementById('openEnvelope');
+      const chooser=document.getElementById('chooser'), ticketScene=document.getElementById('ticketScene');
+      const choices=[...document.querySelectorAll('.choice')], reveal=document.getElementById('revealTicket');
+      const note=document.getElementById('selectionNote'), toast=document.getElementById('toast');
+      let selected=null, toastTimer;
+      const show=(el)=>{el.classList.add('show');el.setAttribute('aria-hidden','false')};
+      const hide=(el)=>{el.classList.remove('show');el.setAttribute('aria-hidden','true')};
+      openButton.addEventListener('click',()=>{if(intro.classList.contains('opening'))return;intro.classList.add('opening');setTimeout(()=>{intro.classList.add('hide');show(chooser);setTimeout(()=>choices[0].focus({preventScroll:true}),500)},550)});
+      choices.forEach(button=>button.addEventListener('click',()=>{
+        selected=button;choices.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+        note.textContent=`Em chọn “${button.dataset.date}” — anh ghi vào vé nhé ${button.dataset.icon}`;
+        reveal.disabled=false;
+      }));
+      reveal.addEventListener('click',()=>{if(!selected)return;document.getElementById('ticketDate').textContent=selected.dataset.date;hide(chooser);show(ticketScene);burst();setTimeout(()=>document.getElementById('saveTicket').focus({preventScroll:true}),500)});
+      document.getElementById('saveTicket').addEventListener('click',()=>window.print());
+      document.getElementById('startAgain').addEventListener('click',()=>{hide(ticketScene);selected=null;choices.forEach(item=>item.setAttribute('aria-pressed','false'));reveal.disabled=true;note.textContent='Chọn một chiếc trước khi mở vé nha ✨';show(chooser);setTimeout(()=>choices[0].focus({preventScroll:true}),450)});
+      function burst(){const bits=['♡','✦','✧','♥','✿'];for(let i=0;i<20;i++){const el=document.createElement('span');el.className='confetti';el.textContent=bits[i%bits.length];el.style.setProperty('--x',`${46+Math.random()*8}%`);el.style.setProperty('--y',`${40+Math.random()*12}%`);el.style.setProperty('--dx',`${(Math.random()-.5)*420}px`);el.style.setProperty('--dy',`${-70-Math.random()*330}px`);document.body.append(el);setTimeout(()=>el.remove(),1400)}}
+      function announce(message){toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),2100)}
+    })();
+  </script>
+</body>
+</html>
