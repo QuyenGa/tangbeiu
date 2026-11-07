@@ -6,7 +6,7 @@
 <title>ĐẠI CHIẾN NÓC NHÀ · MEENAA VS ANH YÊU 💖</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&family=Comfortaa:wght@700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Comfortaa:wght@700;800&family=Nunito:wght@700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --pink-pastel: #ff7597;
@@ -33,7 +33,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   background: #fdf2f8;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Baloo 2', 'Nunito', 'Comfortaa', sans-serif;
   color: #4a2835;
   touch-action: none;
 }
@@ -46,7 +46,7 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: max(8px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+  padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(18px, calc(env(safe-area-inset-bottom) + 12px)) max(10px, env(safe-area-inset-left));
   position: relative;
   overflow: hidden;
   background: radial-gradient(circle at 50% 15%, #ffe4ec 0%, #fdf2f8 60%, #fae8f3 100%);
@@ -141,18 +141,19 @@ html, body {
 .card-right .char-name-line { justify-content: flex-end; }
 
 .c-name {
-  font-family: 'Fredoka', cursive, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-family: 'Baloo 2', 'Comfortaa', cursive, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
   line-height: 1;
 }
 .card-left .c-name { color: #e11d48; }
 .card-right .c-name { color: #2563eb; }
 
 .c-badge {
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 1px 7px;
+  font-family: 'Baloo 2', 'Nunito', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
   border-radius: 999px;
   letter-spacing: 0.04em;
 }
@@ -204,15 +205,15 @@ html, body {
   50% { transform: scale(1.18); }
 }
 .round-text {
-  font-family: 'Fredoka', cursive, sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-family: 'Baloo 2', 'Comfortaa', cursive, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
   color: #ff4d79;
 }
 .top-nav-back {
-  font-family: 'Fredoka', cursive, sans-serif;
-  font-size: 0.68rem;
-  font-weight: 700;
+  font-family: 'Baloo 2', 'Nunito', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
   color: #ff4d79;
   text-decoration: none;
   background: #ffffff;
@@ -286,7 +287,9 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 6px;
+  padding: 8px 12px;
+  /* Đẩy phần này lên trên tránh bị thanh vuốt / điều hướng che */
+  margin-bottom: max(16px, env(safe-area-inset-bottom, 16px));
   z-index: 25;
   touch-action: none;
 }
@@ -369,9 +372,10 @@ html, body {
 .skill-card {
   padding: 11px 8px;
   border-radius: 16px;
-  font-family: 'Fredoka', cursive, sans-serif;
+  font-family: 'Baloo 2', 'Nunito', 'Comfortaa', cursive, sans-serif;
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: 0.02em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -432,8 +436,9 @@ html, body {
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 .v-title {
-  font-family: 'Fredoka', cursive, sans-serif;
+  font-family: 'Baloo 2', 'Comfortaa', cursive, sans-serif;
   font-size: 2.1rem;
+  font-weight: 800;
   color: #e11d48;
   line-height: 1.1;
   margin-bottom: 6px;
@@ -471,8 +476,9 @@ html, body {
   background: linear-gradient(135deg, #ff4d79, #f43f5e);
   border: none;
   border-radius: 999px;
-  font-family: 'Fredoka', cursive, sans-serif;
+  font-family: 'Baloo 2', 'Comfortaa', cursive, sans-serif;
   font-size: 1.25rem;
+  font-weight: 800;
   color: #fff;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(244, 63, 94, 0.4);
@@ -482,8 +488,9 @@ html, body {
   background: #f1f5f9;
   border: 2px solid #e2e8f0;
   border-radius: 999px;
-  font-family: 'Fredoka', cursive, sans-serif;
+  font-family: 'Baloo 2', 'Comfortaa', cursive, sans-serif;
   font-size: 1.25rem;
+  font-weight: 800;
   color: #475569;
   text-decoration: none;
   display: inline-flex;
@@ -494,49 +501,52 @@ html, body {
 /* ── Super Responsive Mobile Layout (Portrait & Landscape Phones) ── */
 @media (max-width: 600px) {
   .game-shell {
-    padding: max(6px, env(safe-area-inset-top)) max(6px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left));
-    gap: 4px;
+    padding: max(12px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(22px, calc(env(safe-area-inset-bottom) + 16px)) max(8px, env(safe-area-inset-left));
+    gap: 5px;
     height: 100svh;
   }
   
   /* Top HUD on Mobile */
   .top-hud {
-    padding: 4px 8px;
-    gap: 4px;
+    padding: 6px 10px;
+    gap: 6px;
     border-radius: 16px;
     border-width: 1.5px;
   }
   .char-card {
-    gap: 5px;
+    gap: 6px;
   }
   .char-avatar-box {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-width: 2px;
   }
   .c-name {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 800;
+    font-family: 'Baloo 2', 'Comfortaa', cursive, sans-serif;
   }
   .c-badge {
     display: none; /* Hide verbose text on mobile to give room for HP bars */
   }
   .hp-pill-track {
-    height: 11px;
+    height: 12px;
     border-width: 1px;
   }
   .center-love-hub {
     min-width: 50px;
   }
   .love-heart-btn {
-    font-size: 1.3rem;
+    font-size: 1.35rem;
   }
   .round-text {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
+    font-family: 'Baloo 2', 'Comfortaa', cursive, sans-serif;
   }
   .top-nav-back {
-    font-size: 0.58rem;
-    padding: 2px 6px;
+    font-size: 0.62rem;
+    font-family: 'Baloo 2', 'Nunito', sans-serif;
+    padding: 2px 7px;
     margin-top: 2px;
   }
 
@@ -559,53 +569,57 @@ html, body {
 
   .kiss-banner-overlay {
     font-size: 1.8rem;
+    font-family: 'Baloo 2', 'Comfortaa', cursive, sans-serif;
   }
 
-  /* Mobile Arcade Controller */
+  /* Mobile Arcade Controller - NÂNG LÊN TRÊN TRÁNH THANH ĐIỀU HƯỚNG / VUỐT ĐÁY ĐIỆN THOẠI */
   .touch-dock {
     width: 100%;
-    padding: 6px 4px max(6px, env(safe-area-inset-bottom));
+    padding: 8px 6px;
+    margin-bottom: max(22px, calc(env(safe-area-inset-bottom) + 16px));
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 6px;
     background: #ffffff;
-    border-radius: 18px;
+    border-radius: 20px;
     border: 1.5px solid #ffccd9;
-    box-shadow: 0 4px 16px rgba(255, 117, 151, 0.18);
+    box-shadow: 0 6px 20px rgba(255, 117, 151, 0.22);
   }
   
   /* Left Hand: Compact Analog Joystick */
   .joystick-zone {
-    width: 92px;
-    height: 92px;
+    width: 94px;
+    height: 94px;
   }
   .joystick-base {
-    width: 86px;
-    height: 86px;
+    width: 88px;
+    height: 88px;
   }
   .joystick-knob {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
   }
   .knob-icon {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
   }
 
   /* Right Hand: 4 Skill Cards */
   .skills-grid {
     flex: 1;
-    max-width: 205px;
+    max-width: 215px;
     grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
+    gap: 5px;
     width: auto;
   }
   .skill-card {
-    padding: 9px 3px;
-    border-radius: 12px;
-    font-size: 0.78rem;
+    padding: 10px 4px;
+    border-radius: 13px;
+    font-size: 0.86rem;
     font-weight: 800;
-    gap: 2px;
+    font-family: 'Baloo 2', 'Nunito', 'Comfortaa', cursive, sans-serif;
+    letter-spacing: 0.02em;
+    gap: 3px;
     box-shadow: 0 3px 8px rgba(0,0,0,0.12);
     white-space: nowrap;
   }
