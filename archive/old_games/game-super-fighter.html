@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ĐẠI CHIẾN ĐƯỜNG PHỐ: NÓC NHÀ VS CỘT NHÀ · STREET FIGHTER COUPLE</title>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --neon-pink: #ff0077;
+  --neon-cyan: #00f0ff;
+  --neon-yellow: #ffe600;
+  --bg-arena: #0b0614;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-user-select: none; user-select: none; }
+body {
+  background: var(--bg-arena);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Header & HUD */
+.hud-bar {
+  width: min(850px, 96vw);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 10;
+}
+.player-hud {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  padding: 8px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.hud-p1 { border-left: 4px solid var(--neon-pink); }
+.hud-p2 { border-right: 4px solid var(--neon-cyan); }
+.hud-name {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+.hp-track {
+  width: 100%;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  position: relative;
+}
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  transition: width 0.15s ease-out;
+}
+.fill-p1 {
+  background: linear-gradient(90deg, #ff0055, #ff528c);
+  box-shadow: 0 0 14px #ff0055;
+}
+.fill-p2 {
+  background: linear-gradient(90deg, #00b4d8, #00f0ff);
+  box-shadow: 0 0 14px #00f0ff;
+  float: right;
+}
+
+/* Rage / Super Meter */
+.rage-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 99px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+.rage-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffd600, #ff9100);
+  box-shadow: 0 0 8px #ffd600;
+  transition: width 0.2s;
+}
+
+.round-timer {
+  font-family: 'Bungee', cursive;
+  font-size: 1.8rem;
+  color: var(--neon-yellow);
+  text-shadow: 0 0 15px rgba(255, 230, 0, 0.6);
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Canvas Viewport */
+.canvas-wrap {
+  width: min(850px, 96vw);
+  height: clamp(280px, 45vh, 440px);
+  position: relative;
+  border-radius: 24px;
+  border: 2px solid rgba(255, 230, 0, 0.4);
+  box-shadow: 0 0 50px rgba(255, 0, 119, 0.25), inset 0 0 40px rgba(0,0,0,0.8);
+  overflow: hidden;
+  background: #11081f;
+}
+#gameCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Combo Popup Banner */
+.combo-banner {
+  position: absolute;
+  top: 15%;
+  left: 20px;
+  font-family: 'Bungee', cursive;
+  font-size: 1.6rem;
+  color: #ffd600;
+  text-shadow: 0 0 10px #ff0077, 2px 2px #000;
+  opacity: 0;
+  transform: scale(0.6) rotate(-8deg);
+  transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  pointer-events: none;
+  z-index: 25;
+}
+.combo-banner.show {
+  opacity: 1;
+  transform: scale(1.1) rotate(-8deg);
+}
+
+/* Action Controls Panel */
+.controls-dock {
+  width: min(850px, 96vw);
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+.dpad {
+  display: flex;
+  gap: 8px;
+}
+.action-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.btn-c {
+  border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 900;
+  font-size: 0.85rem;
+  color: #fff;
+  border-radius: 16px;
+  padding: 11px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+  transition: transform 0.1s, filter 0.1s;
+}
+.btn-c:active { transform: scale(0.92); filter: brightness(1.2); }
+.btn-move { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.25); min-width: 48px; justify-content: center; font-size: 1.1rem; }
+.btn-pan { background: linear-gradient(135deg, #ff4081, #d50057); }
+.btn-slipper { background: linear-gradient(135deg, #ffd600, #ff6d00); color: #111; }
+.btn-boba { background: linear-gradient(135deg, #9c27b0, #673ab7); }
+.btn-super { background: linear-gradient(135deg, #00f0ff, #0072ff); box-shadow: 0 0 20px #00f0ff; }
+
+/* K.O Winner Overlay */
+.ko-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 2, 14, 0.9);
+  backdrop-filter: blur(16px);
+  z-index: 100;
+  display: none;
+  place-items: center;
+  padding: 20px;
+}
+.ko-screen.open { display: grid; }
+.ko-card {
+  background: #190924;
+  border: 2px solid var(--neon-pink);
+  border-radius: 32px;
+  padding: 32px;
+  width: min(520px, 100%);
+  text-align: center;
+  box-shadow: 0 0 60px rgba(255, 0, 119, 0.4);
+  animation: cardIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+@keyframes cardIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.ko-badge {
+  font-family: 'Bungee', cursive;
+  font-size: 3.5rem;
+  color: var(--neon-yellow);
+  text-shadow: 0 0 25px var(--neon-pink);
+}
+.ko-subtitle {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--neon-pink);
+  margin: 10px 0 16px;
+}
+.ko-rules {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 16px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #ebd3f5;
+  text-align: left;
+  border-left: 4px solid var(--neon-yellow);
+  margin-bottom: 22px;
+}
+.btn-playagain {
+  background: linear-gradient(135deg, #ff0077, #ffd600);
+  border: none;
+  font-family: 'Bungee', cursive;
+  font-size: 1.1rem;
+  color: #11081f;
+  padding: 13px 34px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(255, 214, 0, 0.5);
+}
+
+@media(max-width: 600px) {
+  .controls-dock { flex-direction: column; gap: 8px; }
+  .dpad, .action-grid { width: 100%; justify-content: center; }
+  .btn-c { padding: 9px 12px; font-size: 0.74rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HUD Top -->
+<div class="hud-bar">
+  <!-- P1: Nóc Nhà -->
+  <div class="player-hud hud-p1">
+    <div class="hud-name">
+      <span style="color:var(--neon-pink)">👸 NÓC NHÀ (BÉ QUYÊN)</span>
+      <span id="p1HpText">100%</span>
+    </div>
+    <div class="hp-track">
+      <div class="hp-fill fill-p1" id="p1HpFill"></div>
+    </div>
+    <div class="rage-track">
+      <div class="rage-fill" id="p1RageFill"></div>
+    </div>
+  </div>
+
+  <div class="round-timer" id="timerText">99</div>
+
+  <!-- P2: Cột Nhà -->
+  <div class="player-hud hud-p2">
+    <div class="hud-name">
+      <span id="p2HpText">100%</span>
+      <span style="color:var(--neon-cyan)">👦 CỘT NHÀ (ANH YÊU)</span>
+    </div>
+    <div class="hp-track">
+      <div class="hp-fill fill-p2" id="p2HpFill"></div>
+    </div>
+    <div class="rage-track">
+      <div class="rage-fill" id="p2RageFill"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Arena Canvas -->
+<div class="canvas-wrap" id="canvasWrap">
+  <div class="combo-banner" id="comboBanner">3 HITS COMBO!</div>
+  <canvas id="gameCanvas" width="850" height="420"></canvas>
+</div>
+
+<!-- Controls Dock -->
+<div class="controls-dock">
+  <div class="dpad">
+    <button class="btn-c btn-move" id="btnLeft" title="Chạy sang trái">◀</button>
+    <button class="btn-c btn-move" id="btnJump" title="Nhảy lên">▲</button>
+    <button class="btn-c btn-move" id="btnRight" title="Chạy sang phải">▶</button>
+  </div>
+
+  <div class="action-grid">
+    <button class="btn-c btn-pan" id="btnPan" title="Phím J: Phang chảo chống dính">🍳 PHANG CHẢO</button>
+    <button class="btn-c btn-slipper" id="btnSlipper" title="Phím K: Ném Dép Tổ Ong Boomerang">🩴 NÉM DÉP TỔ ONG</button>
+    <button class="btn-c btn-boba" id="btnBobaBomb" title="Phím L: Ném Bom Trà Sữa">🧋 BOM TRÀ SỮA</button>
+    <button class="btn-c btn-super" id="btnSuper" title="Phím Space: Sấm sét Dỗi Hờn">⚡ CHIÊU TỐI THƯỢNG</button>
+  </div>
+</div>
+
+<!-- K.O Finished Modal -->
+<div class="ko-screen" id="koScreen">
+  <div class="ko-card">
+    <div class="ko-badge">FATALITY!</div>
+    <div class="ko-subtitle">👑 NÓC NHÀ TOÀN THẮNG TUYỆT ĐỐI! 👑</div>
+    <div class="ko-rules">
+      ⚖️ <b>BẢN ÁN TRỪNG PHẠT DÀNH CHO CỘT NHÀ:</b><br>
+      • 🍽️ Rửa bát đĩa + lau bếp sạch bong kin kít trong 1 tuần!<br>
+      • 🧋 Mua ngay 1 ly Trà Sữa Full Thạch Phô Mai đền tội!<br>
+      • 🤐 Không được cãi lại nửa lời khi Nóc Nhà đang nói!
+    </div>
+    <button class="btn-playagain" id="btnPlayAgain">TÁI ĐẤU PHỤC THÙ ↺</button>
+  </div>
+</div>
+
+<script>
+// ── Web Audio Synth (Punch, Slipper, Boba explosion, Thunder, Ding) ──
+const A = new (window.AudioContext || window.webkitAudioContext)();
+function sfx(type) {
+  if (A.state === 'suspended') A.resume();
+  const t = A.currentTime;
+  const o = A.createOscillator();
+  const g = A.createGain();
+  o.connect(g); g.connect(A.destination);
+
+  if (type === 'hit') {
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(190, t);
+    o.frequency.exponentialRampToValueAtTime(35, t + 0.12);
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.linearRampToValueAtTime(0.01, t + 0.12);
+    o.start(t); o.stop(t + 0.12);
+  } else if (type === 'slipper') {
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(450, t);
+    o.frequency.exponentialRampToValueAtTime(150, t + 0.2);
+    g.gain.setValueAtTime(0.4, t);
+    g.gain.linearRampToValueAtTime(0.01, t + 0.2);
+    o.start(t); o.stop(t + 0.2);
+  } else if (type === 'bomb') {
+    o.type = 'square';
+    o.frequency.setValueAtTime(100, t);
+    o.frequency.exponentialRampToValueAtTime(20, t + 0.35);
+    g.gain.setValueAtTime(0.6, t);
+    g.gain.exponentialRampToValueAtTime(0.01, t + 0.35);
+    o.start(t); o.stop(t + 0.35);
+  } else if (type === 'thunder') {
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(70, t);
+    o.frequency.linearRampToValueAtTime(300, t + 0.15);
+    o.frequency.exponentialRampToValueAtTime(25, t + 0.6);
+    g.gain.setValueAtTime(0.8, t);
+    g.gain.exponentialRampToValueAtTime(0.01, t + 0.6);
+    o.start(t); o.stop(t + 0.6);
+  } else if (type === 'ko') {
+    o.type = 'sine';
+    o.frequency.setValueAtTime(600, t);
+    o.frequency.linearRampToValueAtTime(900, t + 0.4);
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.exponentialRampToValueAtTime(0.01, t + 1.2);
+    o.start(t); o.stop(t + 1.2);
+  }
+}
+
+// ── Game Canvas & Physics Engine ──
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const wrap = document.getElementById('canvasWrap');
+
+let W = canvas.width = 850;
+let H = canvas.height = 420;
+const FLOOR = H - 70;
+
+// Screen Shake
+let shake = 0;
+function addShake(val) { shake = Math.min(shake + val, 25); }
+
+// Combo System
+let comboCount = 0;
+let comboTimer = null;
+const comboBanner = document.getElementById('comboBanner');
+function hitCombo() {
+  comboCount++;
+  clearTimeout(comboTimer);
+  comboBanner.textContent = comboCount + ' HITS COMBO! 🔥';
+  comboBanner.classList.add('show');
+  comboTimer = setTimeout(() => {
+    comboCount = 0;
+    comboBanner.classList.remove('show');
+  }, 1200);
+}
+
+// Particle System
+const particles = [];
+function spawnSparks(x, y, color = '#ffd600', count = 12) {
+  for (let i = 0; i < count; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 2 + Math.random() * 8;
+    particles.push({
+      x, y,
+      vx: Math.cos(ang) * spd,
+      vy: Math.sin(ang) * spd - 2,
+      rad: 2 + Math.random() * 4,
+      color,
+      alpha: 1,
+      decay: 0.03 + Math.random() * 0.04
+    });
+  }
+}
+
+// Damage Popups
+const popups = [];
+function showDmg(x, y, text, color = '#ffd600') {
+  popups.push({ x, y, text, color, life: 1, vy: -2.5 });
+}
+
+// Projectiles (Flying Slippers & Boba Bombs)
+const projectiles = [];
+function spawnSlipper(x, y, dir) {
+  sfx('slipper');
+  projectiles.push({
+    type: 'slipper',
+    x, y,
+    vx: dir * 14,
+    vy: -2,
+    rot: 0,
+    rotSpeed: 0.35,
+    dmg: 18,
+    active: true
+  });
+}
+
+function spawnBobaBomb(x, y, dir) {
+  sfx('slipper');
+  projectiles.push({
+    type: 'boba',
+    x, y,
+    vx: dir * 9,
+    vy: -8,
+    rot: 0,
+    rotSpeed: 0.15,
+    dmg: 30,
+    active: true
+  });
+}
+
+// ── Fighters Entity ──
+const p1 = {
+  name: 'Bé Quyên',
+  x: 180, y: FLOOR,
+  vx: 0, vy: 0,
+  w: 60, h: 100,
+  dir: 1,
+  hp: 100, maxHp: 100,
+  rage: 0,
+  grounded: true,
+  action: 'idle',
+  timer: 0,
+  color: '#ff2a85',
+  avatar: '👸'
+};
+
+const p2 = {
+  name: 'Anh Yêu',
+  x: 650, y: FLOOR,
+  vx: 0, vy: 0,
+  w: 60, h: 100,
+  dir: -1,
+  hp: 100, maxHp: 100,
+  rage: 0,
+  grounded: true,
+  action: 'idle',
+  timer: 0,
+  color: '#00e5ff',
+  avatar: '👦'
+};
+
+// Attack Logic
+function doPanAttack() {
+  if (p1.action !== 'idle' && p1.action !== 'walk') return;
+  p1.action = 'pan';
+  p1.timer = 18;
+  sfx('hit');
+
+  // Check hit p2
+  const dist = Math.abs(p1.x - p2.x);
+  if (dist < 110 && Math.abs(p1.y - p2.y) < 60) {
+    p2.hp = Math.max(0, p2.hp - 14);
+    p2.vx = p1.dir * 8;
+    p2.vy = -6;
+    p2.action = 'hurt';
+    p2.timer = 15;
+    addShake(7);
+    spawnSparks(p2.x, p2.y - 40, '#ffd600', 16);
+    showDmg(p2.x, p2.y - 80, 'CHẢO TÁT! -14');
+    hitCombo();
+    addP1Rage(15);
+  }
+}
+
+function doSlipperAttack() {
+  if (p1.action !== 'idle' && p1.action !== 'walk') return;
+  p1.action = 'slipper';
+  p1.timer = 16;
+  spawnSlipper(p1.x + p1.dir * 30, p1.y - 50, p1.dir);
+}
+
+function doBobaAttack() {
+  if (p1.action !== 'idle' && p1.action !== 'walk') return;
+  p1.action = 'boba';
+  p1.timer = 20;
+  spawnBobaBomb(p1.x + p1.dir * 30, p1.y - 50, p1.dir);
+}
+
+function doSuperAttack() {
+  if (p1.rage < 100) {
+    showDmg(p1.x, p1.y - 90, 'CHƯA ĐỦ NỘ!', '#ff4081');
+    return;
+  }
+  p1.rage = 0;
+  p1.action = 'super';
+  p1.timer = 45;
+  sfx('thunder');
+  addShake(22);
+
+  // Lightning strikes boy wherever he is
+  p2.hp = Math.max(0, p2.hp - 45);
+  p2.vx = p1.dir * 14;
+  p2.vy = -12;
+  p2.action = 'hurt';
+  p2.timer = 35;
+  spawnSparks(p2.x, p2.y - 50, '#00f0ff', 35);
+  showDmg(p2.x, p2.y - 100, 'SẤM SÉT DỖI HỜN! -45', '#00f0ff');
+  hitCombo();
+  hitCombo();
+}
+
+function addP1Rage(val) {
+  p1.rage = Math.min(100, p1.rage + val);
+  document.getElementById('p1RageFill').style.width = p1.rage + '%';
+}
+
+// ── Input Controls ──
+const keys = {};
+window.addEventListener('keydown', e => {
+  keys[e.key.toLowerCase()] = true;
+  if (e.key === 'j' || e.key === 'J') doPanAttack();
+  if (e.key === 'k' || e.key === 'K') doSlipperAttack();
+  if (e.key === 'l' || e.key === 'L') doBobaAttack();
+  if (e.key === ' ' || e.code === 'Space') doSuperAttack();
+  if (e.key === 'w' || e.key === 'W') {
+    if (p1.grounded) { p1.vy = -16; p1.grounded = false; }
+  }
+});
+window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+
+// Touch / Button mapping
+document.getElementById('btnLeft').addEventListener('pointerdown', () => keys['a'] = true);
+document.getElementById('btnLeft').addEventListener('pointerup', () => keys['a'] = false);
+document.getElementById('btnRight').addEventListener('pointerdown', () => keys['d'] = true);
+document.getElementById('btnRight').addEventListener('pointerup', () => keys['d'] = false);
+document.getElementById('btnJump').addEventListener('pointerdown', () => {
+  if (p1.grounded) { p1.vy = -16; p1.grounded = false; }
+});
+
+document.getElementById('btnPan').addEventListener('click', doPanAttack);
+document.getElementById('btnSlipper').addEventListener('click', doSlipperAttack);
+document.getElementById('btnBobaBomb').addEventListener('click', doBobaAttack);
+document.getElementById('btnSuper').addEventListener('click', doSuperAttack);
+
+// ── Bot AI for Anh Yêu (Tự động di chuyển & tấn công nhẹ) ──
+function updateBoyAI() {
+  if (p2.hp <= 0 || p2.action === 'hurt') return;
+
+  const dist = p1.x - p2.x;
+  p2.dir = dist > 0 ? 1 : -1;
+
+  // AI behavior
+  if (Math.abs(dist) > 130) {
+    p2.vx = p2.dir * 3.2; // Walk towards girl
+  } else if (Math.abs(dist) < 80) {
+    p2.vx = -p2.dir * 2.5; // Back away carefully
+  } else {
+    p2.vx = 0;
+    // Occasional gentle counter
+    if (Math.random() < 0.02 && p2.action === 'idle') {
+      p2.action = 'attack';
+      p2.timer = 15;
+      sfx('hit');
+      // Boy hits girl (Girl has shield: takes only 2 DMG)
+      p1.hp = Math.max(0, p1.hp - 2);
+      showDmg(p1.x, p1.y - 70, 'DÁM ĐÁNH VỢ? -2', '#ff80ab');
+      addP1Rage(25); // Girl gets SUPER ANGRY!
+    }
+  }
+}
+
+// ── Main Game Loop ──
+let gameOver = false;
+let roundTime = 99;
+setInterval(() => {
+  if (!gameOver && roundTime > 0) {
+    roundTime--;
+    document.getElementById('timerText').textContent = roundTime;
+  }
+}, 1000);
+
+function update() {
+  if (gameOver) return;
+
+  // Player 1 controls
+  if (keys['a']) { p1.vx = -6; p1.dir = -1; }
+  else if (keys['d']) { p1.vx = 6; p1.dir = 1; }
+  else { p1.vx *= 0.7; }
+
+  // Gravity & Physics
+  [p1, p2].forEach(p => {
+    p.vy += 0.8; // Gravity
+    p.x += p.vx;
+    p.y += p.vy;
+
+    // Floor collision
+    if (p.y >= FLOOR) {
+      p.y = FLOOR;
+      p.vy = 0;
+      p.grounded = true;
+    }
+    // Arena boundaries
+    p.x = Math.max(40, Math.min(W - 40, p.x));
+
+    if (p.timer > 0) {
+      p.timer--;
+      if (p.timer === 0) p.action = 'idle';
+    }
+  });
+
+  updateBoyAI();
+
+  // Projectiles Update
+  projectiles.forEach(pr => {
+    if (!pr.active) return;
+    pr.x += pr.vx;
+    pr.y += pr.vy;
+    pr.rot += pr.rotSpeed;
+
+    if (pr.type === 'boba') pr.vy += 0.45; // Boba arc
+
+    // Check hit boy
+    const hitDist = Math.hypot(pr.x - p2.x, pr.y - (p2.y - 50));
+    if (hitDist < 48) {
+      pr.active = false;
+      p2.hp = Math.max(0, p2.hp - pr.dmg);
+      p2.vx = pr.vx > 0 ? 8 : -8;
+      p2.vy = -5;
+      p2.action = 'hurt';
+      p2.timer = 18;
+      addShake(pr.type === 'boba' ? 14 : 9);
+      sfx(pr.type === 'boba' ? 'bomb' : 'hit');
+      spawnSparks(pr.x, pr.y, pr.type === 'boba' ? '#ab47bc' : '#ffd600', 20);
+      showDmg(p2.x, p2.y - 80, pr.type === 'boba' ? 'BOM TRÀ SỮA! -30' : 'ĂN DÉP NÈ! -18');
+      hitCombo();
+      addP1Rage(20);
+    }
+
+    if (pr.x < 0 || pr.x > W || pr.y > FLOOR + 20) pr.active = false;
+  });
+
+  // Particles
+  particles.forEach(pt => {
+    pt.x += pt.vx;
+    pt.y += pt.vy;
+    pt.alpha -= pt.decay;
+  });
+  for (let i = particles.length - 1; i >= 0; i--) {
+    if (particles[i].alpha <= 0) particles.splice(i, 1);
+  }
+
+  // Popups
+  popups.forEach(pu => {
+    pu.y += pu.vy;
+    pu.life -= 0.025;
+  });
+  for (let i = popups.length - 1; i >= 0; i--) {
+    if (popups[i].life <= 0) popups.splice(i, 1);
+  }
+
+  // Update HUD
+  document.getElementById('p1HpFill').style.width = p1.hp + '%';
+  document.getElementById('p1HpText').textContent = p1.hp + '%';
+  document.getElementById('p2HpFill').style.width = p2.hp + '%';
+  document.getElementById('p2HpText').textContent = p2.hp + '%';
+
+  // Check K.O
+  if (p2.hp <= 0 && !gameOver) {
+    gameOver = true;
+    sfx('ko');
+    addShake(20);
+    setTimeout(() => {
+      document.getElementById('koScreen').classList.add('open');
+    }, 700);
+  }
+}
+
+// ── Render ──
+function drawFighter(p) {
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.scale(p.dir, 1);
+
+  // Shadow
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 36, 10, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.fill();
+
+  // Torso / Dress
+  ctx.fillStyle = p.color;
+  ctx.beginPath();
+  ctx.roundRect(-22, -68, 44, 48, 12);
+  ctx.fill();
+  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = '#fff';
+  ctx.stroke();
+
+  // Head Circle
+  ctx.beginPath();
+  ctx.arc(0, -82, 28, 0, Math.PI * 2);
+  ctx.fillStyle = p === p1 ? '#ffb3c6' : '#a0e4ff';
+  ctx.fill();
+  ctx.stroke();
+
+  // Avatar Face
+  ctx.font = '28px "Plus Jakarta Sans"';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  let face = p.avatar;
+  if (p.action === 'hurt') face = '😵';
+  if (p.action === 'super') face = '😈';
+  ctx.fillText(face, 0, -80);
+
+  // Weapons held by P1
+  if (p === p1) {
+    // Frying Pan
+    ctx.save();
+    ctx.translate(22, -45);
+    if (p.action === 'pan') ctx.rotate(Math.PI / 3);
+    ctx.fillStyle = '#37474f';
+    ctx.beginPath();
+    ctx.arc(14, 0, 16, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#212121';
+    ctx.fillRect(-6, -3, 14, 6);
+    ctx.restore();
+  }
+
+  // Glove / Defense for P2
+  if (p === p2) {
+    ctx.fillStyle = '#ffd600';
+    ctx.font = '20px sans-serif';
+    ctx.fillText('💐', -28, -45); // Holding flowers to plead
+  }
+
+  ctx.restore();
+}
+
+function render() {
+  ctx.save();
+  ctx.clearRect(0, 0, W, H);
+
+  // Apply Screen Shake
+  if (shake > 0) {
+    const sx = (Math.random() - 0.5) * shake;
+    const sy = (Math.random() - 0.5) * shake;
+    ctx.translate(sx, sy);
+    shake *= 0.88;
+    if (shake < 0.5) shake = 0;
+  }
+
+  // Draw Arena Floor & Neon Grid
+  ctx.fillStyle = '#170b28';
+  ctx.fillRect(0, FLOOR, W, H - FLOOR);
+
+  // Floor Neon Line
+  ctx.beginPath();
+  ctx.moveTo(0, FLOOR);
+  ctx.lineTo(W, FLOOR);
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#ff0077';
+  ctx.shadowColor = '#ff0077';
+  ctx.shadowBlur = 15;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Background Crowd / Neon Lights
+  for (let i = 0; i < 7; i++) {
+    ctx.fillStyle = i % 2 === 0 ? 'rgba(0, 240, 255, 0.08)' : 'rgba(255, 0, 119, 0.08)';
+    ctx.beginPath();
+    ctx.arc(80 + i * 115, 90, 45, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Draw Fighters
+  drawFighter(p1);
+  drawFighter(p2);
+
+  // Draw Projectiles
+  projectiles.forEach(pr => {
+    if (!pr.active) return;
+    ctx.save();
+    ctx.translate(pr.x, pr.y);
+    ctx.rotate(pr.rot);
+    if (pr.type === 'slipper') {
+      ctx.font = '32px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🩴', 0, 0);
+    } else {
+      ctx.font = '36px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🧋', 0, 0);
+    }
+    ctx.restore();
+  });
+
+  // Draw Particles
+  particles.forEach(pt => {
+    ctx.beginPath();
+    ctx.arc(pt.x, pt.y, pt.rad, 0, Math.PI * 2);
+    ctx.fillStyle = pt.color;
+    ctx.globalAlpha = pt.alpha;
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+
+  // Draw Popups
+  popups.forEach(pu => {
+    ctx.font = 'bold 16px "Bungee", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = pu.color;
+    ctx.shadowColor = '#000';
+    ctx.shadowBlur = 4;
+    ctx.globalAlpha = pu.life;
+    ctx.fillText(pu.text, pu.x, pu.y);
+  });
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+
+  ctx.restore();
+}
+
+function loop() {
+  update();
+  render();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+// Restart
+document.getElementById('btnPlayAgain').addEventListener('click', () => {
+  p1.hp = 100;
+  p2.hp = 100;
+  p1.rage = 0;
+  p1.x = 180;
+  p2.x = 650;
+  p2.vx = 0; p2.vy = 0;
+  p2.action = 'idle';
+  roundTime = 99;
+  gameOver = false;
+  document.getElementById('koScreen').classList.remove('open');
+});
+</script>
+</body>
+</html>

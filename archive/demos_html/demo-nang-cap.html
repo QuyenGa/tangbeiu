@@ -1,0 +1,976 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff0f5">
+<title>Demo Nâng Cấp · Trải Nghiệm Kỷ Niệm 20/10 Đẳng Cấp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-gradient: radial-gradient(circle at 15% 15%, #fff0f5 0%, #fde2ec 40%, #f9d2e2 100%);
+  --wine: #893959;
+  --wine-dark: #66223e;
+  --rose-glow: #e88ba9;
+  --gold: #d4a359;
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 16px 40px rgba(137, 57, 89, 0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--bg-gradient);
+  color: #55273b;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background floating particles */
+.ambient-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Top bar with Glass Capsule Music Player */
+.top-bar {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  left: 0;
+  right: 0;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 40;
+}
+.brand-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  padding: 8px 16px;
+  border-radius: 999px;
+  box-shadow: 0 6px 20px rgba(137, 57, 89, 0.08);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--wine);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.brand-tag b {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.music-capsule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  padding: 6px 14px 6px 8px;
+  border-radius: 999px;
+  box-shadow: 0 6px 20px rgba(137, 57, 89, 0.08);
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.music-capsule:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(137, 57, 89, 0.16);
+}
+.music-disc {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #331221 35%, #18050e 100%);
+  border: 2px solid #fff;
+  display: grid;
+  place-items: center;
+  color: #f7a4bf;
+  font-size: 11px;
+  animation: discSpin 4s linear infinite;
+}
+.music-capsule.paused .music-disc { animation-play-state: paused; }
+@keyframes discSpin { to { transform: rotate(360deg); } }
+
+.music-wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 14px;
+}
+.music-wave span {
+  width: 3px;
+  height: 100%;
+  background: var(--wine);
+  border-radius: 3px;
+  animation: waveBar 1.2s ease-in-out infinite alternate;
+}
+.music-wave span:nth-child(2) { animation-delay: 0.2s; height: 60%; }
+.music-wave span:nth-child(3) { animation-delay: 0.4s; height: 80%; }
+.music-capsule.paused .music-wave span { animation: none; height: 4px; }
+@keyframes waveBar { to { height: 25%; } }
+
+/* Main Stage */
+.main-stage {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 85px 20px 115px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Section Container */
+.scene-section {
+  width: min(880px, 100%);
+  display: none;
+  animation: sceneSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.scene-section.active { display: block; }
+@keyframes sceneSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Glass Card */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--glass-border);
+  border-radius: 36px;
+  padding: clamp(24px, 4vw, 44px);
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+}
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.4) 50%, transparent 60%);
+  pointer-events: none;
+  animation: shineGlint 9s infinite;
+}
+@keyframes shineGlint {
+  0% { transform: translateX(-100%); }
+  25%, 100% { transform: translateX(100%); }
+}
+
+/* Headings */
+.card-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--rose-glow);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-eyebrow::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, #e88ba9, transparent);
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4.2vw, 2.7rem);
+  color: var(--wine);
+  line-height: 1.18;
+  margin-bottom: 14px;
+}
+
+/* SCENE 1: ALBUM KỶ NIỆM (UPGRADED) */
+.album-viewport {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(20px, 3.5vw, 40px);
+  align-items: center;
+  margin-top: 14px;
+}
+
+/* Polaroid 3D Stack */
+.polaroid-frame {
+  position: relative;
+  aspect-ratio: 1 / 1.18;
+  width: min(340px, 100%);
+  margin: 0 auto;
+  border-radius: 20px;
+  background: #ffffff;
+  padding: 14px 14px 52px;
+  box-shadow: 0 20px 48px rgba(102, 34, 62, 0.16), 0 2px 8px rgba(0,0,0,0.04);
+  transform: rotate(-2deg);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s;
+  cursor: pointer;
+  user-select: none;
+}
+.polaroid-frame:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 0 26px 60px rgba(102, 34, 62, 0.22);
+}
+.washi-tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1deg);
+  width: 90px;
+  height: 26px;
+  background: rgba(232, 185, 201, 0.65);
+  backdrop-filter: blur(4px);
+  clip-path: polygon(0% 0%, 96% 2%, 100% 98%, 4% 96%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  z-index: 5;
+}
+.photo-img-box {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #fdf2f6;
+}
+.photo-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.polaroid-frame:hover .photo-img-box img {
+  transform: scale(1.05);
+}
+.polaroid-note {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  right: 14px;
+  text-align: center;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.55rem;
+  color: var(--wine);
+}
+
+/* Double click heart explosion */
+.heart-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 5rem;
+  color: #ff3366;
+  text-shadow: 0 0 20px rgba(255, 51, 102, 0.6);
+  pointer-events: none;
+  animation: burstAnim 0.75s ease-out forwards;
+}
+@keyframes burstAnim {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+  100% { transform: translate(-50%, -90px) scale(1); opacity: 0; }
+}
+
+.album-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.album-counter {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--rose-glow);
+}
+.album-counter span {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--wine);
+}
+.album-desc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  color: var(--wine);
+  margin: 8px 0 10px;
+}
+.album-desc-text {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #734559;
+  min-height: 60px;
+}
+.photo-pagination {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+.p-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 14px rgba(137, 57, 89, 0.12);
+  display: grid;
+  place-items: center;
+  color: var(--wine);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.p-btn:hover {
+  transform: scale(1.12);
+  background: #ffffff;
+  color: #c04273;
+  box-shadow: 0 8px 22px rgba(137, 57, 89, 0.22);
+}
+.p-btn svg {
+  transition: transform 0.25s ease;
+}
+.p-btn:hover svg {
+  transform: scale(1.15);
+}
+.photo-progress-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(220, 160, 185, 0.25);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.photo-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59ebc, #c04273);
+  border-radius: 99px;
+  transition: width 0.35s ease;
+}
+
+/* SCENE 2: THẺ CÀO VÉ HẸN HÒ (SCRATCH CARD) */
+.scratch-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+}
+.ticket-voucher {
+  position: relative;
+  background: #fffdf9;
+  border: 2px dashed #d99fb3;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 16px 36px rgba(137, 57, 89, 0.1);
+  overflow: hidden;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.ticket-content h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.45rem;
+  color: var(--wine);
+  margin-bottom: 6px;
+}
+.ticket-content p {
+  font-size: 0.85rem;
+  color: #7b4f62;
+  margin-bottom: 12px;
+}
+.ticket-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffeef4, #ffd4e5);
+  color: var(--wine-dark);
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid #f2bbcf;
+}
+/* Scratch Canvas Layer */
+#scratchCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  z-index: 10;
+  transition: opacity 0.5s;
+}
+.scratch-hint {
+  position: absolute;
+  bottom: 8px;
+  font-size: 0.72rem;
+  color: #9c687e;
+  pointer-events: none;
+  z-index: 11;
+  letter-spacing: 0.05em;
+}
+
+/* Lời hứa & Q&A */
+.promise-block {
+  padding-left: 10px;
+}
+.promise-list {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.promise-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: #6d3950;
+  background: rgba(255, 255, 255, 0.55);
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+.promise-list li i {
+  color: #d64d7c;
+  font-style: normal;
+  font-size: 1.1rem;
+}
+
+.ask-box {
+  background: rgba(255, 240, 247, 0.8);
+  border: 1px solid #f3bed2;
+  border-radius: 20px;
+  padding: 16px;
+  text-align: center;
+}
+.ask-box h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--wine);
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+.ask-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn-yes {
+  background: linear-gradient(135deg, #e85d88, #b72a5b);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 8px 20px rgba(183, 42, 91, 0.35);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-yes:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 26px rgba(183, 42, 91, 0.45);
+}
+.btn-think {
+  background: #ffffff;
+  color: #7b455b;
+  border: 1px solid #e7bfce;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-think:hover {
+  background: #fff0f5;
+}
+
+/* ══════════════════════════════════════════════════
+   FLOATING GLASS DOCK (GIẢI PHÁP THAY THẾ CHO HÀNG NÚT BỊ LỖI)
+══════════════════════════════════════════════════ */
+.floating-dock-wrap {
+  position: fixed;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: min(92vw, 560px);
+}
+
+.floating-dock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 999px;
+  box-shadow: 0 20px 50px rgba(102, 34, 62, 0.18), 0 4px 12px rgba(0,0,0,0.03);
+}
+
+/* Nút quay lại (Pill phụ) */
+.dock-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 245, 249, 0.88);
+  border: 1px solid #eed0dd;
+  color: var(--wine);
+  padding: 11px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  flex: 0 0 auto;
+}
+.dock-btn-secondary:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(137, 57, 89, 0.14);
+}
+
+/* Nút tiến tới (Nút chính nổi bật - Không bao giờ gãy dòng) */
+.dock-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #e45f8a, #8f2951);
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.86rem;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(147, 44, 84, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 auto;
+}
+.dock-btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: btnGlow 3.5s infinite;
+}
+@keyframes btnGlow {
+  20%, 100% { left: 100%; }
+}
+.dock-btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(147, 44, 84, 0.45);
+}
+
+.dock-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  display: inline-block;
+}
+.pulse-heart {
+  animation: heartThrob 1.4s ease-in-out infinite;
+}
+@keyframes heartThrob {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.22); filter: drop-shadow(0 0 6px #ff7fa4); }
+}
+
+.wiggle-gift {
+  animation: giftWiggleAnim 2.2s ease-in-out infinite;
+}
+@keyframes giftWiggleAnim {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(-8deg) scale(1.1); }
+  30% { transform: rotate(8deg) scale(1.1); }
+  45% { transform: rotate(0); }
+}
+
+/* Nút Cây quà bí mật (Huy hiệu hạt vàng lấp lánh) */
+.dock-btn-secret {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #fff7ea, #ffe8c2);
+  border: 1px solid #ffd08a;
+  color: #8c5310;
+  padding: 11px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(212, 163, 89, 0.2);
+  flex: 0 0 auto;
+}
+.dock-btn-secret:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 163, 89, 0.35);
+  background: #fffbee;
+}
+
+/* Modal Popup Món quà bí mật */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(35, 12, 23, 0.65);
+  backdrop-filter: blur(14px);
+  z-index: 100;
+  display: none;
+  place-items: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: grid; }
+.modal-box {
+  background: #fffafc;
+  border: 1px solid #f6d1df;
+  border-radius: 32px;
+  padding: 30px;
+  width: min(500px, 100%);
+  text-align: center;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #edcad8;
+  background: white;
+  color: var(--wine);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .album-viewport, .scratch-container { grid-template-columns: 1fr; }
+  .top-bar { padding: 0 14px; }
+  .brand-tag { font-size: 0.68rem; padding: 6px 12px; }
+  .floating-dock { gap: 6px; padding: 6px 8px; }
+  .dock-btn-secondary, .dock-btn-secret { padding: 10px 12px; font-size: 0.74rem; }
+  .dock-btn-primary { padding: 10px 14px; font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas class="ambient-canvas" id="ambientCanvas"></canvas>
+
+<!-- Top Bar -->
+<header class="top-bar">
+  <div class="brand-tag">
+    <span>🌸</span>
+    <span><b>OUR MEMORIES</b> · 20/10</span>
+  </div>
+  <div class="music-capsule" id="musicCapsule" title="Nhấn để Bật/Tắt nhạc">
+    <div class="music-disc">♫</div>
+    <div class="music-wave">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<!-- Main Stage -->
+<main class="main-stage">
+  
+  <!-- SCENE 1: ALBUM KỶ NIỆM (ĐÃ NÂNG CẤP HOÀN TOÀN) -->
+  <section class="scene-section active" id="sec-album">
+    <div class="glass-card">
+      <div class="card-eyebrow">CHƯƠNG 02 · KHOẢNH KHẮC NGỌT NGÀO</div>
+      <h2 class="card-title">Những nụ cười anh muốn giữ mãi ♡</h2>
+      
+      <div class="album-viewport">
+        <!-- 3D Polaroid Card with double tap to heart -->
+        <div class="polaroid-frame" id="polaroidCard" title="Nhấp đúp chuột để thả tim nha!">
+          <div class="washi-tape"></div>
+          <div class="photo-img-box">
+            <img id="curPhoto" src="images/babi/anh1.jpg" alt="Kỷ niệm của chúng mình">
+          </div>
+          <div class="polaroid-note" id="curCaption">Cục dàng dỗi hờn ♡</div>
+        </div>
+
+        <!-- Album Details & Controls -->
+        <div class="album-details">
+          <div class="album-counter">KỶ NIỆM SỐ <span id="idxText">01</span> / 03</div>
+          <h3 class="album-desc-title" id="titleText">Dỗi mà cũng xinh ghiaaa</h3>
+          <p class="album-desc-text" id="descText">Bức ảnh mỗi lần xem lại anh đều mỉm cười. Lúc này em đang dỗi anh chuyện gì đó mà mặt vẫn đáng yêu không chịu được!</p>
+          
+          <div class="photo-pagination">
+            <button class="p-btn" id="btnPrev" title="Xem ảnh trước" aria-label="Xem ảnh trước">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="photo-progress-track">
+              <div class="photo-progress-fill" id="pFill" style="width: 33%;"></div>
+            </div>
+            <button class="p-btn" id="btnNext" title="Xem ảnh tiếp theo" aria-label="Xem ảnh tiếp theo">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: TẤM VÉ HẸN HÒ & THẺ CÀO BÍ MẬT -->
+  <section class="scene-section" id="sec-ticket">
+    <div class="glass-card">
+      <div class="card-eyebrow">CHƯƠNG 03 · TẤM VÉ TRỌN ĐỜI</div>
+      <h2 class="card-title">Lời hứa và Tấm vé của riêng em ♡</h2>
+      
+      <div class="scratch-container">
+        <!-- Interactive Scratch Card Voucher -->
+        <div class="ticket-voucher">
+          <div class="ticket-content">
+            <span class="ticket-badge">✨ VÉ HẸN HÒ TRỌN ĐỜI</span>
+            <h3 style="margin-top: 14px;">Bất cứ khi nào em muốn</h3>
+            <p>Người đồng hành: <b>Anh của em</b><br>Địa điểm: Bất cứ nơi nào cùng nhau</p>
+            <div style="font-family:'Dancing Script',cursive; font-size: 1.5rem; color: #a43a64;">Yêu em nhất trên đời ♡</div>
+          </div>
+          <canvas id="scratchCanvas"></canvas>
+          <div class="scratch-hint">✨ Dùng chuột hoặc ngón tay cào lớp phủ để xem điều ước!</div>
+        </div>
+
+        <!-- Promise List & Final Q&A -->
+        <div class="promise-block">
+          <ul class="promise-list">
+            <li><i>♡</i> Luôn kiên nhẫn và lắng nghe em</li>
+            <li><i>♡</i> Cùng em đi ăn những món em thích</li>
+            <li><i>♡</i> Không để em phải buồn một mình</li>
+          </ul>
+
+          <div class="ask-box">
+            <h4>Em có chịu đồng ý đi cùng anh mãi mãi hông?</h4>
+            <div class="ask-buttons">
+              <button class="btn-yes" id="btnYes">Dạ có, em đồng ý ♡</button>
+              <button class="btn-think" id="btnThink">Để suy nghĩ đã :P</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════
+     FLOATING DOCK (GIẢI PHÁP GIAO DIỆN MỚI THAY THẾ CHO HÀNG NÚT BỊ GÃY)
+══════════════════════════════════════════════════ -->
+<div class="floating-dock-wrap">
+  <nav class="floating-dock">
+    <button class="dock-btn-secondary" id="dockPrev" aria-label="Quay lại lá thư">
+      <span class="dock-icon">💌</span>
+      <span id="dockPrevLabel">Lá thư tình</span>
+    </button>
+    
+    <button class="dock-btn-primary" id="dockNext" aria-label="Mở món quà cuối cùng">
+      <span id="dockNextLabel">Khám phá món quà cuối</span>
+      <span class="dock-icon pulse-heart">✨💖</span>
+    </button>
+    
+    <button class="dock-btn-secret" id="dockSecret" aria-label="Cây quà bí mật">
+      <span class="dock-icon wiggle-gift">🎁</span>
+      <span>Cây quà bí mật</span>
+    </button>
+  </nav>
+</div>
+
+<!-- Modal Popup Món quà bí mật -->
+<div class="modal-overlay" id="secretModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div style="font-size: 3rem; margin-bottom: 10px;">🌸 🌳 💖</div>
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--wine); margin-bottom: 8px;">Cây Tình Yêu Bí Mật</h3>
+    <p style="font-size: 0.9rem; color:#78455a; line-height: 1.6; margin-bottom: 20px;">
+      Nơi cất giữ những điều ước và chùm quà ngọt ngào nhất dành riêng cho công chúa nhỏ của anh!
+    </p>
+    <button class="btn-yes" onclick="alert('Đã mở Cây Tình Yêu ban đêm rực rỡ pháo hoa!')">Khám phá ngay ✨</button>
+  </div>
+</div>
+
+<audio id="bgSong" loop preload="auto">
+  <source src="nhaccuaanhyeu.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// 1. Dữ liệu Demo Album
+const photos = [
+  { src: 'images/babi/anh1.jpg', caption: 'Cục dàng dỗi hờn ♡', title: 'Dỗi mà cũng xinh ghiaaa', desc: 'Bức ảnh mỗi lần xem lại anh đều mỉm cười. Lúc này em đang dỗi anh chuyện gì đó mà mặt vẫn đáng yêu không chịu được!' },
+  { src: 'images/babi/anh2.jpg', caption: 'Đi ăn cùng bé iu ♡', title: 'Nụ cười tỏa nắng của em', desc: 'Hôm ấy em cười xinh đến mức anh mải ngắm mà suýt quên chụp ảnh. Cảm ơn em vì đã luôn rạng rỡ bên anh.' },
+  { src: 'images/babi/anh3 (2).jpg', caption: 'Một ngày dịu dàng ♡', title: 'Khoảnh khắc bình yên', desc: 'Chỉ cần được ngồi cạnh em, nghe em kể những chuyện vụn vặt thường ngày, thế giới của anh bỗng trở nên thật trọn vẹn.' }
+];
+
+let curIdx = 0;
+const curPhoto = document.getElementById('curPhoto');
+const curCaption = document.getElementById('curCaption');
+const idxText = document.getElementById('idxText');
+const titleText = document.getElementById('titleText');
+const descText = document.getElementById('descText');
+const pFill = document.getElementById('pFill');
+
+function updatePhoto(idx) {
+  curIdx = (idx + photos.length) % photos.length;
+  const p = photos[curIdx];
+  curPhoto.src = p.src;
+  curCaption.textContent = p.caption;
+  idxText.textContent = String(curIdx + 1).padStart(2, '0');
+  titleText.textContent = p.title;
+  descText.textContent = p.desc;
+  pFill.style.width = ((curIdx + 1) / photos.length * 100) + '%';
+}
+
+document.getElementById('btnNext').addEventListener('click', () => updatePhoto(curIdx + 1));
+document.getElementById('btnPrev').addEventListener('click', () => updatePhoto(curIdx - 1));
+
+// 2. Double Tap to Heart
+const card = document.getElementById('polaroidCard');
+card.addEventListener('dblclick', (e) => {
+  const heart = document.createElement('div');
+  heart.className = 'heart-burst';
+  heart.textContent = '❤';
+  card.appendChild(heart);
+  setTimeout(() => heart.remove(), 800);
+});
+
+// 3. Floating Dock Logic
+let currentScene = 0;
+const scenes = [document.getElementById('sec-album'), document.getElementById('sec-ticket')];
+const dockPrev = document.getElementById('dockPrev');
+const dockNext = document.getElementById('dockNext');
+const dockPrevLabel = document.getElementById('dockPrevLabel');
+const dockNextLabel = document.getElementById('dockNextLabel');
+
+function switchScene(idx) {
+  currentScene = idx;
+  scenes.forEach((s, i) => s.classList.toggle('active', i === currentScene));
+  if (currentScene === 0) {
+    dockPrev.querySelector('.dock-icon').textContent = '💌';
+    dockPrevLabel.textContent = 'Lá thư tình';
+    dockNextLabel.textContent = 'Khám phá món quà cuối';
+    dockNext.querySelector('.dock-icon').textContent = '✨💖';
+  } else {
+    dockPrev.querySelector('.dock-icon').textContent = '📖';
+    dockPrevLabel.textContent = 'Trở lại Album';
+    dockNextLabel.textContent = 'Xem lại từ đầu';
+    dockNext.querySelector('.dock-icon').textContent = '🌸';
+  }
+}
+
+dockNext.addEventListener('click', () => {
+  if (currentScene === 0) switchScene(1);
+  else switchScene(0);
+});
+dockPrev.addEventListener('click', () => {
+  if (currentScene === 1) switchScene(0);
+  else alert('Quay lại lá thư!');
+});
+
+// 4. Modal Quà bí mật
+const modal = document.getElementById('secretModal');
+document.getElementById('dockSecret').addEventListener('click', () => modal.classList.add('open'));
+document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('open'));
+
+// 5. Thẻ cào Scratch Card Canvas
+const canvas = document.getElementById('scratchCanvas');
+const ctx = canvas.getContext('2d');
+function initScratch() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  
+  // Nền nhũ bạc ánh hồng
+  const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  grad.addColorStop(0, '#e5d1dc');
+  grad.addColorStop(0.5, '#f7e3ee');
+  grad.addColorStop(1, '#dfcad7');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Chữ trên lớp cào
+  ctx.font = '600 14px "Plus Jakarta Sans"';
+  ctx.fillStyle = '#8f4f6b';
+  ctx.textAlign = 'center';
+  ctx.fillText('✨ CÀO NHẸ TẠI ĐÂY NÈ BABI ✨', canvas.width / 2, canvas.height / 2);
+}
+setTimeout(initScratch, 200);
+
+let isScratching = false;
+function scratch(e) {
+  if (!isScratching) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX || e.touches[0].clientX) - rect.left;
+  const y = (e.clientY || e.touches[0].clientY) - rect.top;
+  
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.beginPath();
+  ctx.arc(x, y, 22, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+canvas.addEventListener('mousedown', () => isScratching = true);
+canvas.addEventListener('mouseup', () => isScratching = false);
+canvas.addEventListener('mousemove', scratch);
+canvas.addEventListener('touchstart', () => isScratching = true, { passive: true });
+canvas.addEventListener('touchend', () => isScratching = false);
+canvas.addEventListener('touchmove', scratch, { passive: true });
+
+// 6. Nút đồng ý & suy nghĩ
+document.getElementById('btnYes').addEventListener('click', () => {
+  alert('Anh yêu em nhiều lắmmm! Chúc công chúa của anh một ngày 20/10 ngập tràn hạnh phúc ❤️');
+});
+document.getElementById('btnThink').addEventListener('click', () => {
+  alert('Ơ kìa suy nghĩ gì nữa taaa! Nút màu hồng bên cạnh đang đợi em bấm kìa :P');
+  document.getElementById('btnYes').style.transform = 'scale(1.15)';
+});
+
+// 7. Audio Playback
+const song = document.getElementById('bgSong');
+const capsule = document.getElementById('musicCapsule');
+let playing = false;
+capsule.addEventListener('click', () => {
+  if (!playing) {
+    song.play().then(() => {
+      playing = true;
+      capsule.classList.remove('paused');
+    }).catch(() => {});
+  } else {
+    song.pause();
+    playing = false;
+    capsule.classList.add('paused');
+  }
+});
+capsule.classList.add('paused');
+</script>
+</body>
+</html>

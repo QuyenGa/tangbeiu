@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Võ Đài Tình Yêu · Quyết Đấu Xem Ai Rửa Bát & Bao Trà Sữa!</title>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --neon-pink: #ff2a85;
+  --neon-blue: #00e5ff;
+  --ring-yellow: #ffd600;
+  --bg-dark: #12091c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-user-select: none; user-select: none; }
+body {
+  background: var(--bg-dark);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Header & Arena Info */
+.game-header {
+  text-align: center;
+  margin-bottom: 10px;
+  z-index: 20;
+}
+.game-title {
+  font-family: 'Bungee', cursive;
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  background: linear-gradient(90deg, #ff2a85, #ffd600, #00e5ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+  text-shadow: 0 0 20px rgba(255, 42, 133, 0.4);
+}
+.game-sub {
+  font-size: 0.8rem;
+  color: #e0b4d6;
+  margin-top: 2px;
+}
+
+/* Mode Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  z-index: 20;
+}
+.tab-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid #ff4081;
+  background: rgba(255, 42, 133, 0.15);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  background: #ff2a85;
+  box-shadow: 0 0 15px #ff2a85;
+}
+
+/* Health Bars */
+.health-container {
+  width: min(650px, 94vw);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  z-index: 20;
+}
+.hp-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  padding: 8px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.hp-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.hp-girl { color: var(--neon-pink); }
+.hp-boy { color: var(--neon-blue); }
+.hp-track {
+  width: 100%;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fill-girl { background: linear-gradient(90deg, #ff4081, #ff0055); box-shadow: 0 0 10px #ff0055; }
+.fill-boy { background: linear-gradient(90deg, #00b0ff, #00e5ff); box-shadow: 0 0 10px #00e5ff; }
+
+/* The Boxing Ring Arena */
+.ring-stage {
+  width: min(650px, 94vw);
+  height: 320px;
+  position: relative;
+  border-radius: 24px;
+  background: radial-gradient(circle at 50% 90%, #30163f, #150921 70%);
+  border: 2px solid rgba(255, 214, 0, 0.4);
+  box-shadow: 0 0 40px rgba(255, 42, 133, 0.25), inset 0 0 30px rgba(0,0,0,0.8);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* Ring Ropes */
+.ring-ropes {
+  position: absolute;
+  top: 130px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  pointer-events: none;
+  z-index: 5;
+}
+.rope {
+  height: 5px;
+  background: linear-gradient(90deg, #ff2a85, #ffd600, #00e5ff);
+  box-shadow: 0 0 8px rgba(255, 214, 0, 0.6);
+}
+
+/* Fighters on Arena */
+.fighter {
+  position: absolute;
+  bottom: 30px;
+  width: 120px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.15s ease-out;
+  z-index: 10;
+}
+.fighter-girl { left: 18%; }
+.fighter-boy { right: 18%; transform: scaleX(-1); }
+
+/* Chibi Avatar Heads */
+.head {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  font-size: 2.2rem;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.5);
+  transition: transform 0.1s;
+}
+.head-girl {
+  background: linear-gradient(135deg, #ff94b9, #ff5388);
+  border: 3px solid #fff;
+}
+.head-boy {
+  background: linear-gradient(135deg, #8ad3ff, #3894e6);
+  border: 3px solid #fff;
+}
+.bow-icon {
+  position: absolute;
+  top: -12px;
+  right: -5px;
+  font-size: 1.4rem;
+}
+
+/* Fighter Body & Gloves */
+.body-torso {
+  width: 44px;
+  height: 48px;
+  border-radius: 14px;
+  margin-top: -6px;
+  position: relative;
+}
+.torso-girl { background: #ff2a85; }
+.torso-boy { background: #0077c2; }
+
+.glove {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  top: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  transition: transform 0.1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+.glove-girl { background: #ff0055; left: -14px; }
+.glove-boy { background: #00e5ff; left: -14px; }
+.glove-right { left: auto; right: -14px; }
+
+/* Hit Animations */
+.punch-anim .glove-right {
+  transform: translateX(45px) scale(1.3);
+}
+.uppercut-anim {
+  animation: upperAnim 0.35s ease forwards;
+}
+@keyframes upperAnim {
+  50% { transform: translateY(-40px) scale(1.15); }
+  100% { transform: translateY(0); }
+}
+.hurt-anim {
+  animation: hurtShake 0.3s ease;
+}
+@keyframes hurtShake {
+  20% { transform: translateX(-15px) rotate(-10deg); filter: brightness(2) contrast(2); }
+  40% { transform: translateX(12px) rotate(8deg); }
+  60% { transform: translateX(-8px); }
+  100% { transform: translateX(0); }
+}
+
+/* Floating Impact Text */
+.combat-text {
+  position: absolute;
+  font-family: 'Bungee', cursive;
+  font-size: 1.5rem;
+  color: #ffd600;
+  text-shadow: 0 0 10px #ff2a85, 2px 2px #000;
+  pointer-events: none;
+  animation: popUp 0.6s ease-out forwards;
+  z-index: 30;
+}
+@keyframes popUp {
+  0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+  30% { transform: translate(-50%, -25px) scale(1.3); opacity: 1; }
+  100% { transform: translate(-50%, -60px) scale(0.9); opacity: 0; }
+}
+
+/* Game Controls Bar */
+.controls-bar {
+  width: min(650px, 94vw);
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+  z-index: 20;
+}
+.btn-action {
+  padding: 12px 20px;
+  border-radius: 16px;
+  border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 900;
+  font-size: 0.95rem;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-action:active { transform: scale(0.95); }
+.btn-punch { background: linear-gradient(135deg, #ff4081, #d50057); box-shadow: 0 6px 18px rgba(255, 64, 129, 0.4); }
+.btn-uppercut { background: linear-gradient(135deg, #ffd600, #ff9100); color: #222; box-shadow: 0 6px 18px rgba(255, 214, 0, 0.4); }
+.btn-ult { background: linear-gradient(135deg, #00e5ff, #0091ea); box-shadow: 0 6px 18px rgba(0, 229, 255, 0.4); }
+.btn-boba { background: linear-gradient(135deg, #a1887f, #5d4037); box-shadow: 0 6px 18px rgba(93, 64, 55, 0.4); }
+
+/* K.O Result Modal */
+.ko-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 3, 18, 0.88);
+  backdrop-filter: blur(16px);
+  z-index: 50;
+  display: none;
+  place-items: center;
+  padding: 20px;
+}
+.ko-modal.show { display: grid; }
+.ko-box {
+  background: #1e0e2d;
+  border: 2px solid var(--neon-pink);
+  box-shadow: 0 0 50px rgba(255, 42, 133, 0.5);
+  border-radius: 28px;
+  padding: 30px;
+  width: min(480px, 100%);
+  text-align: center;
+  animation: koDrop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+@keyframes koDrop {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.ko-title {
+  font-family: 'Bungee', cursive;
+  font-size: 3rem;
+  color: #ffd600;
+  text-shadow: 0 0 20px #ff2a85;
+}
+.ko-winner {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--neon-pink);
+  margin: 10px 0 16px;
+}
+.ko-decree {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 14px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #e0d0eb;
+  margin-bottom: 20px;
+  border-left: 4px solid var(--ring-yellow);
+}
+.btn-restart {
+  background: linear-gradient(135deg, #ff2a85, #ffd600);
+  border: none;
+  padding: 12px 30px;
+  border-radius: 999px;
+  font-family: 'Bungee', cursive;
+  font-size: 1rem;
+  color: #12091c;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(255, 214, 0, 0.5);
+}
+
+/* BOBATHON MINI GAME STYLES */
+.boba-mode { display: none; width: min(650px, 94vw); height: 380px; position: relative; }
+.boba-mode.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.boba-cup-box {
+  width: 130px;
+  height: 200px;
+  border: 4px solid #fff;
+  border-top: none;
+  border-radius: 0 0 35px 35px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.straw {
+  position: absolute;
+  top: -40px;
+  left: 45px;
+  width: 18px;
+  height: 180px;
+  background: #ff4081;
+  border: 2px solid #fff;
+  transform: rotate(12deg);
+  border-radius: 9px;
+  z-index: 2;
+}
+.tea-liquid {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(180deg, #d7ccc8, #8d6e63);
+  transition: height 0.15s ease;
+}
+.boba-pearls {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px;
+}
+.pearl {
+  width: 16px;
+  height: 16px;
+  background: #212121;
+  border: 1px solid #424242;
+  border-radius: 50%;
+  box-shadow: inset 0 -2px 4px #000;
+}
+</style>
+</head>
+<body>
+
+<div class="game-header">
+  <div class="tabs">
+    <button class="tab-btn active" id="tabBoxing">🥊 ĐẠI CHIẾN QUYẾT ĐẤU</button>
+    <button class="tab-btn" id="tabBoba">🧋 THI HÚT TRÀ SỮA</button>
+  </div>
+  <h1 class="game-title">VÕ ĐÀI TÌNH YÊU</h1>
+  <p class="game-sub">Võ sĩ nào thua sẽ phải RỬA BÁT & BAO TRÀ SỮA 1 TUẦN!</p>
+</div>
+
+<!-- ════ MODE 1: BOXING GAME ════ -->
+<div id="boxingMode">
+  <div class="health-container">
+    <div class="hp-card">
+      <div class="hp-info">
+        <span class="hp-girl">👸 BÉ YÊU (VÔ ĐỊCH)</span>
+        <span id="hpGirlText">100%</span>
+      </div>
+      <div class="hp-track">
+        <div class="hp-fill fill-girl" id="hpGirlFill"></div>
+      </div>
+    </div>
+    
+    <div style="font-family:'Bungee'; font-size: 1.2rem; color: #ffd600;">VS</div>
+
+    <div class="hp-card">
+      <div class="hp-info">
+        <span class="hp-boy">👦 ANH YÊU (CHỊU TRẬN)</span>
+        <span id="hpBoyText">100%</span>
+      </div>
+      <div class="hp-track">
+        <div class="hp-fill fill-boy" id="hpBoyFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boxing Ring -->
+  <div class="ring-stage" id="ringStage">
+    <div class="ring-ropes">
+      <div class="rope"></div>
+      <div class="rope"></div>
+      <div class="rope"></div>
+    </div>
+
+    <!-- Fighter 1: Bé Yêu -->
+    <div class="fighter fighter-girl" id="girlFighter">
+      <div class="head head-girl">
+        <span>🥰</span>
+        <div class="bow-icon">🎀</div>
+      </div>
+      <div class="body-torso torso-girl">
+        <div class="glove glove-girl"></div>
+        <div class="glove glove-girl glove-right"></div>
+      </div>
+    </div>
+
+    <!-- Fighter 2: Anh Yêu -->
+    <div class="fighter fighter-boy" id="boyFighter">
+      <div class="head head-boy">
+        <span id="boyFace">🥺</span>
+      </div>
+      <div class="body-torso torso-boy">
+        <div class="glove glove-boy"></div>
+        <div class="glove glove-boy glove-right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls Bar -->
+  <div class="controls-bar">
+    <button class="btn-action btn-punch" id="btnJab">
+      <span>🥊</span> ĐẤM DỖI HỜN
+    </button>
+    <button class="btn-action btn-uppercut" id="btnUpper">
+      <span>💥</span> MÓC HÀM "ĂN GÌ CŨNG ĐƯỢC"
+    </button>
+    <button class="btn-action btn-ult" id="btnUlt">
+      <span>⚡</span> TUYỆT CHIÊU: "EM LUÔN ĐÚNG!"
+    </button>
+  </div>
+</div>
+
+<!-- ════ MODE 2: BOBA DRINKING GAME ════ -->
+<div class="boba-mode" id="bobaMode">
+  <div style="text-align:center; margin-bottom: 14px;">
+    <h2 style="font-family:'Bungee'; color: #ffd600;">AI HÚT TRÀ SỮA NHANH HƠN?</h2>
+    <p style="font-size:0.85rem; color:#e0b4d6;">Nhấn liên tục vào nút dưới để hút cạn ly trà sữa!</p>
+  </div>
+
+  <div class="boba-cup-box" id="bobaCup">
+    <div class="straw"></div>
+    <div class="tea-liquid" id="teaLiquid" style="height: 85%;"></div>
+    <div class="boba-pearls" id="pearlsContainer">
+      <div class="pearl"></div><div class="pearl"></div><div class="pearl"></div>
+      <div class="pearl"></div><div class="pearl"></div><div class="pearl"></div>
+      <div class="pearl"></div><div class="pearl"></div><div class="pearl"></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 24px;">
+    <button class="btn-action btn-boba" id="btnSlurp" style="font-size: 1.15rem; padding: 14px 32px;">
+      <span>🧋</span> HÚT CẠN TRÂN CHÂU! (CLICK LIÊN TỤC)
+    </button>
+  </div>
+</div>
+
+<!-- K.O Modal Victory Decree -->
+<div class="ko-modal" id="koModal">
+  <div class="ko-box">
+    <div class="ko-title">K. O ! ! !</div>
+    <div class="ko-winner">🏆 CÔNG CHÚA ĐÃ THẮNG TUYỆT ĐỐI! 👑</div>
+    <div class="ko-decree" id="koDecree">
+      <b>TÒA ÁN TÌNH YÊU TUYÊN ÁN:</b><br>
+      • Anh phải rửa toàn bộ bát đĩa trong 1 tuần tới!<br>
+      • Chiều nay phải tự động đèo em đi mua Trà Sữa Full Topping!<br>
+      • Tuyệt đối không được hỏi câu: <i>"Hôm nay em ăn gì?"</i> nữa!
+    </div>
+    <button class="btn-restart" id="btnRestart">ĐẤU TIẾP TRẬN NỮA ↺</button>
+  </div>
+</div>
+
+<script>
+// Web Audio API Sound Effects (Arcade Punch & Bell)
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playPunchSound(freq = 150) {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.15);
+  gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.15);
+}
+
+function playDing() {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+  gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.8);
+}
+
+// Boxing Game Logic
+let girlHP = 100;
+let boyHP = 100;
+const girlFighter = document.getElementById('girlFighter');
+const boyFighter = document.getElementById('boyFighter');
+const boyFace = document.getElementById('boyFace');
+const hpBoyFill = document.getElementById('hpBoyFill');
+const hpBoyText = document.getElementById('hpBoyText');
+const ringStage = document.getElementById('ringStage');
+const koModal = document.getElementById('koModal');
+
+function showCombatText(text) {
+  const label = document.createElement('div');
+  label.className = 'combat-text';
+  label.textContent = text;
+  label.style.left = '60%';
+  label.style.top = '40%';
+  ringStage.appendChild(label);
+  setTimeout(() => label.remove(), 600);
+}
+
+function attackBoy(dmg, text, soundFreq) {
+  if (boyHP <= 0) return;
+  
+  // Girl animation
+  girlFighter.classList.add('punch-anim');
+  setTimeout(() => girlFighter.classList.remove('punch-anim'), 150);
+  
+  // Boy reacts
+  playPunchSound(soundFreq);
+  boyHP = Math.max(0, boyHP - dmg);
+  hpBoyFill.style.width = boyHP + '%';
+  hpBoyText.textContent = boyHP + '%';
+  
+  boyFighter.classList.add('hurt-anim');
+  boyFace.textContent = boyHP < 40 ? '😵' : (boyHP < 70 ? '😭' : '🤕');
+  showCombatText(text);
+  
+  setTimeout(() => boyFighter.classList.remove('hurt-anim'), 300);
+
+  if (boyHP <= 0) {
+    playDing();
+    boyFace.textContent = '💀';
+    boyFighter.style.transform = 'scaleX(-1) rotate(-85deg) translateY(40px)';
+    setTimeout(() => koModal.classList.add('show'), 700);
+  }
+}
+
+// Attack Buttons
+document.getElementById('btnJab').addEventListener('click', () => {
+  attackBoy(18, 'BỐP! (-18 HP)', 180);
+});
+
+document.getElementById('btnUpper').addEventListener('click', () => {
+  girlFighter.classList.add('uppercut-anim');
+  setTimeout(() => girlFighter.classList.remove('uppercut-anim'), 350);
+  attackBoy(32, 'MÓC HÀM! (-32 HP)', 240);
+});
+
+document.getElementById('btnUlt').addEventListener('click', () => {
+  attackBoy(60, 'CHIÊU VỢ LUÔN ĐÚNG! (-60 HP)', 320);
+});
+
+// Restart Boxing
+document.getElementById('btnRestart').addEventListener('click', () => {
+  boyHP = 100;
+  girlHP = 100;
+  hpBoyFill.style.width = '100%';
+  hpBoyText.textContent = '100%';
+  boyFace.textContent = '🥺';
+  boyFighter.style.transform = 'scaleX(-1)';
+  koModal.classList.remove('show');
+});
+
+// Boba Drinking Game
+let teaLevel = 85;
+const teaLiquid = document.getElementById('teaLiquid');
+const btnSlurp = document.getElementById('btnSlurp');
+
+btnSlurp.addEventListener('click', () => {
+  if (teaLevel > 5) {
+    teaLevel -= 8;
+    teaLiquid.style.height = teaLevel + '%';
+    playPunchSound(300 + Math.random() * 200);
+    
+    // Slurp bubble
+    const bubble = document.createElement('div');
+    bubble.className = 'combat-text';
+    bubble.textContent = 'ỰC ỰC! 🧋';
+    bubble.style.left = '50%';
+    bubble.style.top = '30%';
+    document.getElementById('bobaCup').appendChild(bubble);
+    setTimeout(() => bubble.remove(), 500);
+  } else {
+    teaLiquid.style.height = '0%';
+    playDing();
+    alert('🎉 BÉ ĐÃ HÚT CẠN LY TRÀ SỮA! Anh Yêu chịu thua và gọi thêm ly size L full thạch phô mai nhé!');
+    teaLevel = 85;
+    teaLiquid.style.height = '85%';
+  }
+});
+
+// Tab Switching
+const tabBoxing = document.getElementById('tabBoxing');
+const tabBoba = document.getElementById('tabBoba');
+const boxingMode = document.getElementById('boxingMode');
+const bobaMode = document.getElementById('bobaMode');
+
+tabBoxing.addEventListener('click', () => {
+  tabBoxing.classList.add('active');
+  tabBoba.classList.remove('active');
+  boxingMode.style.display = 'block';
+  bobaMode.classList.remove('active');
+});
+
+tabBoba.addEventListener('click', () => {
+  tabBoba.classList.add('active');
+  tabBoxing.classList.remove('active');
+  boxingMode.style.display = 'none';
+  bobaMode.classList.add('active');
+});
+</script>
+</body>
+</html>

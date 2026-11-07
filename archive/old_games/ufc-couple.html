@@ -1,0 +1,2155 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>UFC BLOODSPORT 300 · ĐẠI CHIẾN ĐẪM MÁU NÓC NHÀ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Plus+Jakarta+Sans:wght@700;800;900&family=Bebas+Neue&family=Creepster&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blood-red: #dc2626;
+  --blood-dark: #7f1d1d;
+  --blood-bright: #ff0033;
+  --ufc-gold: #fbbf24;
+  --ufc-gold-glow: #ffd700;
+  --neon-cyan: #06b6d4;
+  --bg-dark: #050608;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-dark);
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  color: #fff;
+  touch-action: none;
+}
+
+/* Master Layout */
+.bloodsport-app {
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: max(6px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 20%, #1a080c 0%, #08090d 60%, #030406 100%);
+}
+
+/* Top Broadcast Ticker */
+.broadcast-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: min(920px, 100%);
+  margin: 0 auto 4px;
+  font-family: 'Teko', sans-serif;
+  letter-spacing: 0.1em;
+  font-size: 0.95rem;
+  color: #94a3b8;
+  padding: 0 4px;
+}
+.live-badge {
+  background: linear-gradient(135deg, var(--blood-bright), var(--blood-dark));
+  color: #fff;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 0 14px rgba(255, 0, 51, 0.8);
+  animation: pulseLive 1.5s infinite;
+}
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px #fff;
+}
+@keyframes pulseLive {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.96); }
+}
+
+/* Luxury Combat Scoreboard */
+.scoreboard-wrap {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  background: rgba(18, 12, 16, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(220, 38, 38, 0.4);
+  border-radius: 18px;
+  padding: 8px 16px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.9), 0 0 25px rgba(220, 38, 38, 0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  position: relative;
+  z-index: 20;
+}
+
+/* Fighter Profile Cells */
+.corner-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.corner-red { flex-direction: row; text-align: left; }
+.corner-blue { flex-direction: row-reverse; text-align: right; }
+
+.f-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2.5px solid;
+  position: relative;
+  flex-shrink: 0;
+}
+.corner-red .f-avatar {
+  border-color: #ff0055;
+  box-shadow: 0 0 18px rgba(255, 0, 85, 0.8);
+}
+.corner-blue .f-avatar {
+  border-color: #00d4ff;
+  box-shadow: 0 0 18px rgba(0, 212, 255, 0.8);
+}
+.f-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.f-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.f-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.corner-blue .f-title-row { justify-content: flex-end; }
+
+.fighter-name {
+  font-family: 'Teko', sans-serif;
+  font-size: 1.55rem;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.corner-red .fighter-name { color: #ff3366; text-shadow: 0 0 12px rgba(255, 51, 102, 0.6); }
+.corner-blue .fighter-name { color: #38bdf8; text-shadow: 0 0 12px rgba(56, 189, 248, 0.6); }
+
+.status-badge {
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: #000;
+  background: var(--ufc-gold-glow);
+  padding: 1px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+/* Dual-Layer Delayed Damage Health Gauges */
+.hp-case {
+  width: 100%;
+  height: 16px;
+  background: #000;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.18);
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+}
+.hp-lag {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background: #f59e0b;
+  transition: width 0.5s ease-out;
+}
+.hp-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  transition: width 0.12s ease-out;
+}
+.corner-red .hp-bar {
+  left: 0;
+  background: linear-gradient(90deg, #990011, #ff0033);
+  box-shadow: 0 0 10px rgba(255, 0, 51, 0.8);
+}
+.corner-red .hp-lag { left: 0; }
+.corner-blue .hp-bar {
+  right: 0;
+  background: linear-gradient(90deg, #0284c7, #00d4ff);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+}
+.corner-blue .hp-lag { right: 0; }
+
+.stamina-case {
+  width: 100%;
+  height: 4px;
+  background: #111;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.stamina-fill {
+  height: 100%;
+  width: 100%;
+  background: #00e5ff;
+  transition: width 0.08s ease;
+}
+.corner-red .stamina-fill { background: #fbbf24; }
+
+/* Center Timer */
+.round-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 85px;
+  padding: 0 6px;
+}
+.round-lbl {
+  font-family: 'Teko', sans-serif;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--ufc-gold-glow);
+  letter-spacing: 0.14em;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+.clock-lbl {
+  font-family: 'Teko', sans-serif;
+  font-size: 2.1rem;
+  line-height: 1;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+
+/* Octagon Arena Viewport */
+.octagon-viewport {
+  flex: 1;
+  width: min(960px, 100%);
+  margin: 6px auto;
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 2px solid rgba(220, 38, 38, 0.35);
+  background: #050609;
+  box-shadow: 0 0 60px rgba(0,0,0,0.95), 0 0 30px rgba(220, 38, 38, 0.3), inset 0 0 70px rgba(0,0,0,0.95);
+}
+#arenaCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Screen Blood Decal Overlay (Máu bắn thẳng vào mặt kính màn hình) */
+#lensBloodCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 23;
+}
+
+/* Violent Vignette & Screen Splatter */
+.brutal-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 90px rgba(220, 38, 38, 0);
+  transition: box-shadow 0.15s ease;
+  z-index: 24;
+}
+.brutal-vignette.active {
+  box-shadow: inset 0 0 110px rgba(220, 38, 38, 0.9), inset 0 0 40px rgba(255, 0, 0, 0.7);
+  animation: bleedPulse 0.3s infinite alternate;
+}
+@keyframes bleedPulse {
+  0% { opacity: 0.75; }
+  100% { opacity: 1; }
+}
+
+/* Floating Banners */
+.brutality-banner {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  font-family: 'Creepster', cursive, sans-serif;
+  font-size: 4rem;
+  letter-spacing: 0.08em;
+  color: #ff0033;
+  text-shadow: 0 0 30px #ff0033, 4px 4px 0 #000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 30;
+  transition: all 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+.brutality-banner.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.combo-badge {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  font-family: 'Teko', sans-serif;
+  font-size: 2.4rem;
+  letter-spacing: 0.08em;
+  color: var(--ufc-gold-glow);
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 2px 2px #000;
+  opacity: 0;
+  transform: scale(0.6);
+  pointer-events: none;
+  z-index: 25;
+  transition: all 0.18s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+.combo-badge.show {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.rogan-banner {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-15px);
+  background: rgba(15, 8, 12, 0.94);
+  border: 1.5px solid var(--blood-bright);
+  border-radius: 30px;
+  padding: 6px 22px;
+  font-family: 'Teko', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(255, 0, 51, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 25;
+  transition: all 0.22s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  white-space: nowrap;
+}
+.rogan-banner.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.rogan-banner b { color: var(--ufc-gold-glow); }
+
+/* Ergonomic Glassmorphic Arcade Controller */
+.controller-dock {
+  width: min(960px, 100%);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  z-index: 25;
+  touch-action: none;
+}
+
+/* Left Touch D-Pad */
+.dpad-cluster {
+  display: grid;
+  grid-template-columns: repeat(3, 58px);
+  grid-template-rows: repeat(2, 52px);
+  gap: 6px;
+}
+.ctrl-btn {
+  background: rgba(26, 16, 22, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(220, 38, 38, 0.35);
+  border-radius: 14px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.2);
+  transition: transform 0.08s, background 0.08s, border-color 0.08s;
+  touch-action: none;
+}
+.ctrl-btn:active, .ctrl-btn.active {
+  transform: scale(0.9);
+  background: rgba(220, 38, 38, 0.5);
+  border-color: var(--blood-bright);
+  box-shadow: 0 0 24px rgba(255, 0, 51, 0.9);
+}
+.ctrl-btn span {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  margin-top: -3px;
+}
+.d-left { grid-column: 1; grid-row: 2; }
+.d-jump { grid-column: 2; grid-row: 1; }
+.d-guard { grid-column: 2; grid-row: 2; }
+.d-right { grid-column: 3; grid-row: 2; }
+
+/* Right Combat Actions */
+.actions-cluster {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: min(380px, 56vw);
+}
+.atk-btn {
+  padding: 13px 10px;
+  border-radius: 14px;
+  font-family: 'Teko', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.7);
+  transition: transform 0.08s, filter 0.08s;
+  touch-action: none;
+  white-space: nowrap;
+}
+.atk-btn:active, .atk-btn.active {
+  transform: scale(0.9);
+  filter: brightness(1.4);
+}
+
+.act-punch {
+  background: linear-gradient(135deg, #e11d48 0%, #881337 100%);
+  border-color: #fb7185;
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.6);
+}
+.act-headkick {
+  background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%);
+  border-color: #f87171;
+  box-shadow: 0 6px 24px rgba(220, 38, 38, 0.8);
+}
+.act-takedown {
+  background: linear-gradient(135deg, #0284c7 0%, #1e3a8a 100%);
+  border-color: #7dd3fc;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6);
+}
+.act-choke {
+  background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+  border-color: #c4b5fd;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
+}
+
+/* Submission Escape Modal */
+.sub-modal {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 2, 4, 0.92);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  backdrop-filter: blur(10px);
+}
+.sub-modal.active { display: flex; }
+.sub-header {
+  font-family: 'Teko', sans-serif;
+  font-size: 3rem;
+  letter-spacing: 0.06em;
+  color: #ff0033;
+  text-shadow: 0 0 25px #ff0033;
+  margin-bottom: 6px;
+}
+.sub-gauge-box {
+  width: min(340px, 80%);
+  height: 28px;
+  background: #111;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: 0 0 25px rgba(255, 0, 51, 0.6);
+}
+.sub-gauge-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #fbbf24, #ef4444);
+  transition: width 0.05s ease;
+}
+.sub-tap-trigger {
+  background: #ff0033;
+  color: #fff;
+  font-family: 'Teko', sans-serif;
+  font-size: 1.9rem;
+  padding: 14px 44px;
+  border-radius: 999px;
+  border: none;
+  box-shadow: 0 0 35px #ff0033;
+  cursor: pointer;
+  animation: tapPulse 0.25s infinite alternate;
+}
+@keyframes tapPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+/* Pre-Fight Tale of the Tape */
+.tale-of-tape {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 6, 12, 0.85) 0%, rgba(6, 7, 10, 0.94) 100%), url('demo-assets/ufc_punch.jpg') center/cover no-repeat;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 16px;
+  transition: opacity 0.45s ease;
+}
+.tale-of-tape.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+.tot-top {
+  text-align: center;
+}
+.tot-subtitle {
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  color: var(--ufc-gold-glow);
+  font-weight: 800;
+}
+.tot-main-title {
+  font-family: 'Teko', sans-serif;
+  font-size: 2.8rem;
+  letter-spacing: 0.1em;
+  color: #fff;
+  line-height: 1;
+}
+
+.tot-matrix {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  max-width: 780px;
+  margin: 0 auto;
+  width: 100%;
+}
+.tot-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tot-side-red { text-align: right; }
+.tot-side-blue { text-align: left; }
+
+.tot-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tot-side-red .tot-header-row { flex-direction: row-reverse; }
+
+.tot-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid;
+  flex-shrink: 0;
+}
+.tot-side-red .tot-thumb {
+  border-color: #ff0055;
+  box-shadow: 0 0 25px rgba(255, 0, 85, 0.8);
+}
+.tot-side-blue .tot-thumb {
+  border-color: #00d4ff;
+  box-shadow: 0 0 25px rgba(0, 212, 255, 0.8);
+}
+.tot-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tot-name-txt {
+  font-family: 'Teko', sans-serif;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+.tot-side-red .tot-name-txt { color: #ff3366; }
+.tot-side-blue .tot-name-txt { color: #38bdf8; }
+
+.tot-stat-box {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+}
+.tot-stat-lbl {
+  font-size: 0.68rem;
+  color: var(--ufc-gold-glow);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  display: block;
+}
+.tot-stat-val {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #f1f5f9;
+}
+.tot-vs-tag {
+  font-family: 'Teko', sans-serif;
+  font-size: 4.5rem;
+  color: #451a24;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.btn-enter-octagon {
+  max-width: 440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  background: linear-gradient(135deg, #ff0033, #990011);
+  border: 2px solid #ffd700;
+  border-radius: 999px;
+  font-family: 'Teko', sans-serif;
+  font-size: 1.9rem;
+  letter-spacing: 0.08em;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 35px rgba(255, 0, 51, 0.6);
+  animation: pulseEnter 1.5s infinite;
+}
+@keyframes pulseEnter {
+  0%, 100% { transform: scale(1); box-shadow: 0 10px 35px rgba(255, 0, 51, 0.6); }
+  50% { transform: scale(1.03); box-shadow: 0 14px 45px rgba(255, 215, 0, 0.8); }
+}
+
+/* Post-Fight Octagon Decision Modal */
+.ko-modal {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 4, 8, 0.95);
+  z-index: 60;
+  display: none;
+  place-items: center;
+  padding: 16px;
+  backdrop-filter: blur(12px);
+}
+.ko-modal.active { display: grid; }
+.ko-modal-card {
+  width: min(520px, 100%);
+  background: linear-gradient(180deg, #1c0d12 0%, #0d0910 100%);
+  border: 2.5px solid #ff0033;
+  border-radius: 26px;
+  padding: 26px;
+  text-align: center;
+  box-shadow: 0 0 70px rgba(255, 0, 51, 0.4), 0 0 35px rgba(0,0,0,0.9);
+  animation: dropModal 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+@keyframes dropModal {
+  from { opacity: 0; transform: scale(0.8) translateY(-20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.ko-title {
+  font-family: 'Creepster', cursive, sans-serif;
+  font-size: 3.6rem;
+  color: #ff0033;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-shadow: 0 0 25px rgba(255, 0, 51, 0.9);
+}
+.ko-belt {
+  font-size: 4rem;
+  margin: 4px 0;
+  filter: drop-shadow(0 0 20px gold);
+}
+.ko-champ-name {
+  font-family: 'Teko', sans-serif;
+  font-size: 2rem;
+  color: var(--ufc-gold-glow);
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+.ko-text-decree {
+  background: rgba(0,0,0,0.6);
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  text-align: left;
+  margin-bottom: 20px;
+  border-left: 4px solid #ff0033;
+}
+.ko-buttons {
+  display: flex;
+  gap: 10px;
+}
+.btn-replay {
+  flex: 1;
+  padding: 14px;
+  background: linear-gradient(135deg, #ff0033, #990011);
+  border: 1.5px solid #ffd700;
+  border-radius: 999px;
+  font-family: 'Teko', sans-serif;
+  font-size: 1.6rem;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(255, 0, 51, 0.5);
+}
+.btn-back-home {
+  padding: 14px 24px;
+  background: #241419;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 999px;
+  font-family: 'Teko', sans-serif;
+  font-size: 1.6rem;
+  color: #fff;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile Compact */
+@media (max-height: 540px) {
+  .broadcast-bar { display: none; }
+  .scoreboard-wrap { padding: 4px 10px; border-radius: 10px; }
+  .f-avatar { width: 38px; height: 38px; }
+  .fighter-name { font-size: 1.2rem; }
+  .clock-lbl { font-size: 1.5rem; }
+  .dpad-cluster { grid-template-columns: repeat(3, 48px); grid-template-rows: repeat(2, 42px); gap: 4px; }
+  .ctrl-btn { font-size: 1.15rem; }
+  .atk-btn { padding: 8px 6px; font-size: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="bloodsport-app">
+
+  <!-- Live PPV Broadcast Bar -->
+  <div class="broadcast-bar">
+    <span class="live-badge"><i class="live-dot"></i> ĐẪM MÁU TRỰC TIẾP</span>
+    <span>UFC BLOODSPORT 300 · ĐẠI CHIẾN LỒNG SẮT NÓC NHÀ</span>
+    <span style="color:var(--ufc-gold-glow)">★ MAIN EVENT K.O ★</span>
+  </div>
+
+  <!-- Scoreboard HUD -->
+  <header class="scoreboard-wrap">
+    <!-- Red Corner: Bé Quyên -->
+    <div class="corner-cell corner-red">
+      <div class="f-avatar">
+        <img src="images/anh1.JPG" alt="Bé Quyên">
+      </div>
+      <div class="f-meta">
+        <div class="f-title-row">
+          <span class="fighter-name">BÉ QUYÊN</span>
+          <span class="status-badge">#CHAMP</span>
+        </div>
+        <div class="hp-case">
+          <div class="hp-lag" id="redLag"></div>
+          <div class="hp-bar" id="redHp"></div>
+        </div>
+        <div class="stamina-case">
+          <div class="stamina-fill" id="redStamina"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Clock -->
+    <div class="round-box">
+      <span class="round-lbl" id="roundLbl">HIỆP 1 / 5</span>
+      <span class="clock-lbl" id="clockLbl">05:00</span>
+    </div>
+
+    <!-- Blue Corner: Anh Yêu -->
+    <div class="corner-cell corner-blue">
+      <div class="f-avatar">
+        <img src="images/anh2.JPG" alt="Anh Yêu">
+      </div>
+      <div class="f-meta">
+        <div class="f-title-row">
+          <span class="status-badge">#CHALLENGER</span>
+          <span class="fighter-name">ANH YÊU</span>
+        </div>
+        <div class="hp-case">
+          <div class="hp-lag" id="blueLag"></div>
+          <div class="hp-bar" id="blueHp"></div>
+        </div>
+        <div class="stamina-case">
+          <div class="stamina-fill" id="blueStamina"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Arena Viewport -->
+  <main class="octagon-viewport">
+    <div class="brutal-vignette" id="brutalVignette"></div>
+    <div class="brutality-banner" id="brutalityBanner">BRUTALITY!</div>
+    <div class="combo-badge" id="comboBadge">3-HIT COMBO! 🔥</div>
+    <div class="rogan-banner" id="roganBanner"><b>JOE ROGAN:</b> MÁU ĐÃ CHẢY BE BÉT TRÊN SÀN!</div>
+    <canvas id="arenaCanvas" width="960" height="480"></canvas>
+    <!-- Overlay canvas for blood dripping on screen lens -->
+    <canvas id="lensBloodCanvas" width="960" height="480"></canvas>
+  </main>
+
+  <!-- Mobile Dual-Thumb Controller -->
+  <footer class="controller-dock">
+    <!-- Left Hand: Movement -->
+    <div class="dpad-cluster">
+      <button class="ctrl-btn d-jump" id="btnUp" aria-label="Nhảy né">▲<span>JUMP</span></button>
+      <button class="ctrl-btn d-left" id="btnLeft" aria-label="Lùi">◀<span>BACK</span></button>
+      <button class="ctrl-btn d-guard" id="btnDown" aria-label="Thủ kín">▼<span>GUARD</span></button>
+      <button class="ctrl-btn d-right" id="btnRight" aria-label="Tiến">▶<span>RUSH</span></button>
+    </div>
+
+    <!-- Right Hand: Violent Combat Actions -->
+    <div class="actions-cluster">
+      <button class="atk-btn act-punch" id="actPunch">🥊 ĐẤM VỠ MỒM</button>
+      <button class="atk-btn act-headkick" id="actHeadkick">🩸 HEADKICK MÁU ME</button>
+      <button class="atk-btn act-takedown" id="actTakedown">🤼 QUẬT ĐẬP SÀN</button>
+      <button class="atk-btn act-choke" id="actChoke">🥋 BẺ CỔ SIẾT HỌNG</button>
+    </div>
+  </footer>
+
+  <!-- Submission Choke Modal -->
+  <div class="sub-modal" id="subModal">
+    <div class="sub-header">⚠️ ĐANG BỊ SIẾT CỔ NGHẸT THỞ!</div>
+    <p style="color:#fca5a5;font-size:0.95rem;margin-bottom:12px;font-weight:700">CHẠM LIÊN TỤC VÀO NÚT ĐỂ PHÁ KHÓA HOẶC ĐẬP SÀN XIN HÀNG!</p>
+    <div class="sub-gauge-box">
+      <div class="sub-gauge-fill" id="subFill"></div>
+    </div>
+    <button class="sub-tap-trigger" id="btnTapEscape">THOÁT RA NGAY! 🔥</button>
+  </div>
+
+  <!-- Tale of the Tape -->
+  <div class="tale-of-tape" id="totModal">
+    <div class="tot-top">
+      <div class="tot-subtitle">UFC BLOODSPORT · MAIN EVENT BOUT</div>
+      <div class="tot-main-title">TALE OF THE TAPE</div>
+    </div>
+
+    <div class="tot-matrix">
+      <!-- Red Corner (Quyên) -->
+      <div class="tot-side tot-side-red">
+        <div class="tot-header-row">
+          <div class="tot-thumb"><img src="images/anh1.JPG" alt="Bé Quyên"></div>
+          <div class="tot-name-txt">BÉ QUYÊN 👑</div>
+        </div>
+        <div class="tot-stat-box">
+          <span class="tot-stat-lbl">THÀNH TÍCH MMA</span>
+          <span class="tot-stat-val">99 THẮNG - 0 THUA (99 KOs Đẫm Máu)</span>
+        </div>
+        <div class="tot-stat-box">
+          <span class="tot-stat-lbl">PHONG CÁCH</span>
+          <span class="tot-stat-val">Bạt Tai Sấm Sét · Muay Thai Đẫm Máu</span>
+        </div>
+        <div class="tot-stat-box">
+          <span class="tot-stat-lbl">SẢI TAY / REACH</span>
+          <span class="tot-stat-val">Vươn tới tịch thu ví tiền & điện thoại 24/7</span>
+        </div>
+        <div class="tot-stat-box">
+          <span class="tot-stat-lbl">SÁT THƯƠNG ĐẶC BIỆT</span>
+          <span class="tot-stat-val">"Em giận rồi đấy!" (+1000% Sát thương máu)</span>
+        </div>
+      </div>
+
+      <div class="tot-vs-tag">VS</div>
+
+      <!-- Blue Corner (Anh Yêu) -->
+      <div class="tot-side tot-side-blue">
+        <div class="tot-header-row">
+          <div class="tot-thumb"><img src="images/anh2.JPG" alt="Anh Yêu"></div>
+          <div class="tot-name-txt">ANH YÊU 🥊</div>
+        </div>
+        <div class="tot-stat-box">
+          <span class="tot-stat-lbl">THÀNH TÍCH MMA</span>
+          <span class="tot-stat-val">0 THẮNG - 99 THUA (Bị ăn đòn kiên cường)</span>
+        </div>
+        <div class="tot-stat-box">
+          <span class="tot-stat-lbl">PHONG CÁCH</span>
+          <span class="tot-stat-val">Chịu đòn vô địch · Xin lỗi siêu tốc</span>
+        </div>
+        <div class="tot-stat-box">
+          <span class="tot-stat-lbl">SẢI TAY / REACH</span>
+          <span class="tot-stat-val">Chỉ đủ ôm vợ và bưng trà sữa</span>
+        </div>
+        <div class="tot-stat-box">
+          <span class="tot-stat-lbl">SÁT THƯƠNG ĐẶC BIỆT</span>
+          <span class="tot-stat-val">"Anh chuyển khoản ngay đây!" (-85% sát thương)</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-enter-octagon" id="btnEnterOctagon">BƯỚC VÀO LỒNG BÁT GIÁC! (FIGHT)</button>
+  </div>
+
+  <!-- Post Fight Decision Modal -->
+  <div class="ko-modal" id="koModal">
+    <div class="ko-modal-card">
+      <div class="ko-title" id="koTitleTxt">BRUTALITY!</div>
+      <div class="ko-belt">🏆</div>
+      <div class="ko-champ-name" id="koChampTxt">BÉ QUYÊN GIỮ NGUYÊN ĐAI VÔ ĐỊCH!</div>
+      <div class="ko-text-decree" id="koDecreeTxt">
+        <b>BẢN ÁN SAU TRẬN ĐẤU ĐẪM MÁU:</b><br>
+        • Võ sĩ <b>Anh Yêu</b> đã bị hạ Knockout đo sàn đẫm máu tại Hiệp 1!<br>
+        • <b>Hình phạt lập tức:</b> Chuyển khoản 100% lương tháng, dọn dẹp nhà cửa 1 tuần!<br>
+        • Tối nay phải đèo Nóc Nhà đi ăn lẩu Haidilao và mua 2 ly trà sữa trân châu full topping!
+      </div>
+      <div class="ko-buttons">
+        <button class="btn-replay" id="btnReplay">ĐẤU LẠI (REMATCH) 🥊</button>
+        <a class="btn-back-home" href="index.html">VỀ TRANG CHỦ 💖</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ── Visceral Web Audio Synthesizer (Bone Cracks, Blood Squishes, Horns) ── */
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playBloodyFx(type) {
+  try {
+    const ctx = getAudio();
+    const t = ctx.currentTime;
+
+    if (type === 'bell') {
+      for (let i = 0; i < 3; i++) {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(880, t + i * 0.26);
+        g.gain.setValueAtTime(0.35, t + i * 0.26);
+        g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.26 + 0.35);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(t + i * 0.26);
+        osc.stop(t + i * 0.26 + 0.4);
+      }
+    } else if (type === 'punch') {
+      // Leather smack + wet squelch
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(260, t);
+      osc.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+      g.gain.setValueAtTime(0.55, t);
+      g.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.13);
+    } else if (type === 'boneCrack') {
+      // Brutal bone break crunch
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(1400, t);
+      osc.frequency.exponentialRampToValueAtTime(90, t + 0.18);
+      g.gain.setValueAtTime(0.65, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.19);
+    } else if (type === 'bloodSquirt') {
+      // Gushing liquid squirt sound
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(480, t);
+      osc.frequency.linearRampToValueAtTime(120, t + 0.25);
+      g.gain.setValueAtTime(0.45, t);
+      g.gain.exponentialRampToValueAtTime(0.01, t + 0.25);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.26);
+    } else if (type === 'slam') {
+      // Massive sub bass slam
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(110, t);
+      osc.frequency.exponentialRampToValueAtTime(20, t + 0.5);
+      g.gain.setValueAtTime(0.85, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.51);
+    }
+  } catch(e) {}
+}
+
+function phoneVibe(pat) {
+  if (navigator.vibrate) try { navigator.vibrate(pat); } catch(e) {}
+}
+
+/* ── Canvases Setup ── */
+const arenaCanvas = document.getElementById('arenaCanvas');
+const actx = arenaCanvas.getContext('2d');
+const lensCanvas = document.getElementById('lensBloodCanvas');
+const lctx = lensCanvas.getContext('2d');
+
+let W = arenaCanvas.width;
+let H = arenaCanvas.height;
+let FLOOR_Y = H * 0.77;
+
+function resizeCanvases() {
+  const rect = arenaCanvas.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  arenaCanvas.width = rect.width * dpr;
+  arenaCanvas.height = rect.height * dpr;
+  lensCanvas.width = rect.width * dpr;
+  lensCanvas.height = rect.height * dpr;
+  W = arenaCanvas.width;
+  H = arenaCanvas.height;
+  FLOOR_Y = H * 0.77;
+}
+window.addEventListener('resize', resizeCanvases);
+setTimeout(resizeCanvases, 100);
+
+/* ── OVER-THE-TOP BLOOD ENGINE (HỆ THỐNG MÁU BE BÉT) ── */
+// 1. Permanent Mat Blood Puddles & Splatters
+const floorBlood = [];
+// 2. High-speed Blood Streams & Droplets
+const flyingBlood = [];
+// 3. Bloody Screen Lens Decals (Dripping on camera glass)
+const lensBlood = [];
+// 4. Flying Teeth & Mouthguard Debris
+const flyingTeeth = [];
+// 5. Slash Arcs
+const slashArcs = [];
+
+let cameraShake = 0;
+let hitStopFrames = 0;
+
+// Spawns massive fountains of blood on hit
+function eruptBloodFountain(x, y, dir, intensity = 'medium') {
+  playBloodyFx('bloodSquirt');
+  if (intensity === 'heavy') playBloodyFx('boneCrack');
+
+  const count = intensity === 'heavy' ? 45 : 22;
+
+  // 1. Gushing Blood Jets
+  for (let i = 0; i < count; i++) {
+    const angle = dir > 0 
+      ? (-Math.PI * 0.1 - Math.random() * Math.PI * 0.7) 
+      : (-Math.PI * 0.9 + Math.random() * Math.PI * 0.7);
+    const speed = 7 + Math.random() * (intensity === 'heavy' ? 18 : 12);
+    flyingBlood.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      rad: 2.5 + Math.random() * (intensity === 'heavy' ? 5.5 : 3.5),
+      color: Math.random() < 0.65 ? '#dc2626' : (Math.random() < 0.5 ? '#990011' : '#ff0033'),
+      life: 1
+    });
+  }
+
+  // 2. Giant Mat Blood Puddle & Radial Splatters
+  const puddleX = x + dir * (20 + Math.random() * 40);
+  const puddleY = Math.min(H * 0.92, Math.max(FLOOR_Y - 10, y + (Math.random() * 40 - 5)));
+  
+  floorBlood.push({
+    x: puddleX,
+    y: puddleY,
+    radX: intensity === 'heavy' ? (20 + Math.random() * 32) : (12 + Math.random() * 20),
+    radY: intensity === 'heavy' ? (10 + Math.random() * 16) : (6 + Math.random() * 10),
+    rot: Math.random() * Math.PI,
+    color: '#880011',
+    alpha: 0.85
+  });
+
+  // Satellite splatters around puddle
+  for (let s = 0; s < (intensity === 'heavy' ? 14 : 7); s++) {
+    floorBlood.push({
+      x: puddleX + (Math.random() - 0.5) * 80,
+      y: puddleY + (Math.random() - 0.5) * 40,
+      radX: 3 + Math.random() * 7,
+      radY: 2 + Math.random() * 4,
+      rot: Math.random() * Math.PI,
+      color: '#b91c1c',
+      alpha: 0.75
+    });
+  }
+
+  // 3. Splatter onto Camera Lens / Screen Glass (Máu văng thẳng vào mắt kính)
+  if (intensity === 'heavy' || Math.random() < 0.45) {
+    const lx = Math.random() * W;
+    const ly = Math.random() * H * 0.7;
+    lensBlood.push({
+      x: lx,
+      y: ly,
+      rad: 14 + Math.random() * 35,
+      dripY: 0,
+      maxDrip: 30 + Math.random() * 70,
+      alpha: 0.9,
+      dripSpeed: 0.8 + Math.random() * 1.5
+    });
+  }
+
+  // 4. Flying Teeth
+  if (intensity === 'heavy') {
+    for (let t = 0; t < 2; t++) {
+      flyingTeeth.push({
+        x, y,
+        vx: (dir > 0 ? 1 : -1) * (4 + Math.random() * 8),
+        vy: -7 - Math.random() * 9,
+        rot: 0,
+        vrot: (Math.random() - 0.5) * 0.3
+      });
+    }
+  }
+
+  // Cap floor blood to avoid lag
+  if (floorBlood.length > 350) floorBlood.splice(0, floorBlood.length - 350);
+}
+
+// Spawns wind slash arc
+function spawnSlash(x, y, dir, color = '#ff0033') {
+  slashArcs.push({
+    x, y, dir,
+    radius: 75,
+    angle: dir > 0 ? -Math.PI * 0.4 : -Math.PI * 0.6,
+    color,
+    alpha: 1,
+    decay: 0.08
+  });
+}
+
+/* ── Fighter Class (Anime Brawler Anatomy) ── */
+class BrutalFighter {
+  constructor(isPlayer, name, corner) {
+    this.isPlayer = isPlayer;
+    this.name = name;
+    this.corner = corner; // 'red' or 'blue'
+    this.x = corner === 'red' ? W * 0.3 : W * 0.7;
+    this.y = FLOOR_Y;
+    this.vx = 0;
+    this.vy = 0;
+    this.dir = corner === 'red' ? 1 : -1;
+    this.hp = 100;
+    this.lagHp = 100;
+    this.stamina = 100;
+    this.isGuarding = false;
+    this.combo = 0;
+
+    this.anim = 'idle'; // idle, stride, punch, headkick, takedown, submit, hurt, down
+    this.animTime = 0;
+    this.animMax = 0;
+
+    // Ponytail physics chain
+    this.hair = [
+      { x: 0, y: 0, vx: 0, vy: 0 },
+      { x: 0, y: 0, vx: 0, vy: 0 },
+      { x: 0, y: 0, vx: 0, vy: 0 },
+      { x: 0, y: 0, vx: 0, vy: 0 }
+    ];
+  }
+
+  setAnim(name, duration) {
+    this.anim = name;
+    this.animTime = 0;
+    this.animMax = duration;
+  }
+
+  update(opp) {
+    if (this.anim !== 'down' && this.anim !== 'submit') {
+      this.dir = this.x < opp.x ? 1 : -1;
+    }
+
+    this.x += this.vx;
+    this.y += this.vy;
+
+    if (this.y < FLOOR_Y) {
+      this.vy += 0.85;
+    } else {
+      this.y = FLOOR_Y;
+      this.vy = 0;
+    }
+
+    // Bounds
+    const margin = W * 0.08;
+    if (this.x < margin) this.x = margin;
+    if (this.x > W - margin) this.x = W - margin;
+
+    this.vx *= 0.82;
+
+    if (this.stamina < 100) this.stamina = Math.min(100, this.stamina + 0.4);
+
+    // Lag HP drain
+    if (this.lagHp > this.hp) {
+      this.lagHp -= 0.65;
+      if (this.lagHp < this.hp) this.lagHp = this.hp;
+    }
+
+    if (this.animMax > 0) {
+      this.animTime++;
+      if (this.animTime >= this.animMax) {
+        if (this.anim === 'hurt' && this.hp > 0) {
+          this.setAnim('idle', 0);
+        } else if (this.anim !== 'down') {
+          this.setAnim('idle', 0);
+        }
+      }
+    }
+
+    // Ponytail Physics
+    const hx = this.x - this.dir * 10;
+    const hy = this.y - 125;
+    this.hair[0].x = hx;
+    this.hair[0].y = hy;
+
+    for (let i = 1; i < this.hair.length; i++) {
+      const prev = this.hair[i - 1];
+      const cur = this.hair[i];
+      cur.vx += (-this.dir * 3.5 - (cur.x - prev.x) * 0.35) * 0.45;
+      cur.vy += (4.5 - (cur.y - prev.y) * 0.35) * 0.45;
+      cur.vx *= 0.72;
+      cur.vy *= 0.72;
+      cur.x += cur.vx;
+      cur.y += cur.vy;
+    }
+  }
+
+  takeHit(dmg, type, opp) {
+    if (this.isGuarding) {
+      dmg *= 0.2;
+      playBloodyFx('punch');
+      eruptBloodFountain(this.x + this.dir * 18, this.y - 75, this.dir, 'light');
+      phoneVibe(30);
+      return;
+    }
+
+    this.hp = Math.max(0, this.hp - dmg);
+    this.stamina = Math.max(0, this.stamina - 20);
+    this.setAnim('hurt', 20);
+    hitStopFrames = 4; // 4-frame hit freeze
+    cameraShake = type === 'headkick' || type === 'slam' ? 24 : 12;
+
+    this.vx = -this.dir * (type === 'headkick' ? 16 : 8);
+
+    opp.combo++;
+    if (opp.combo >= 2) {
+      showComboBadge(`${opp.combo}-HIT COMBO! 🔥`);
+    }
+
+    if (type === 'headkick') {
+      eruptBloodFountain(this.x, this.y - 95, this.dir, 'heavy');
+      phoneVibe([80, 50, 150]);
+      triggerRogan("<b>JOE ROGAN:</b> HEADKICK NỨT SỌ! MÁU PHUN XỐI XẢ!");
+    } else if (type === 'slam') {
+      playBloodyFx('slam');
+      eruptBloodFountain(this.x, this.y - 20, this.dir, 'heavy');
+      phoneVibe([100, 60, 180]);
+      triggerRogan("<b>JOE ROGAN:</b> CÚ SLAM DẬP PHỔI KINH HOÀNG!");
+    } else {
+      playBloodyFx('punch');
+      eruptBloodFountain(this.x, this.y - 80, this.dir, 'medium');
+      phoneVibe(50);
+    }
+
+    document.getElementById('brutalVignette').classList.add('active');
+    setTimeout(() => {
+      if (p1.hp > 25 && p2.hp > 25) {
+        document.getElementById('brutalVignette').classList.remove('active');
+      }
+    }, 450);
+
+    if (this.hp <= 0) {
+      this.setAnim('down', 999999);
+      finishBloodyFight(opp, this, type === 'headkick' ? 'FATALITY! HEADKICK K.O!' : 'BRUTALITY! K.O!');
+    }
+  }
+}
+
+const p1 = new BrutalFighter(true, 'Bé Quyên', 'red');
+const p2 = new BrutalFighter(false, 'Anh Yêu', 'blue');
+
+/* ── Drawing Animated Stylized Fighters (Bold Manga / Anime Ink Art) ── */
+function drawLimbInk(ctx, x1, y1, x2, y2, w1, w2, fillCol, strokeCol = '#000') {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  if (len < 0.001) return;
+  const nx = -dy / len;
+  const ny = dx / len;
+
+  ctx.fillStyle = fillCol;
+  ctx.strokeStyle = strokeCol;
+  ctx.lineWidth = 3.5;
+  ctx.beginPath();
+  ctx.moveTo(x1 + nx * w1, y1 + ny * w1);
+  ctx.quadraticCurveTo(
+    (x1 + x2) * 0.5 + nx * (w1 * 1.3),
+    (y1 + y2) * 0.5 + ny * (w1 * 1.3),
+    x2 + nx * w2, y2 + ny * w2
+  );
+  ctx.lineTo(x2 - nx * w2, y2 - ny * w2);
+  ctx.quadraticCurveTo(
+    (x1 + x2) * 0.5 - nx * (w1 * 0.9),
+    (y1 + y2) * 0.5 - ny * (w1 * 0.9),
+    x1 - nx * w1, y1 - ny * w1
+  );
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+}
+
+function renderBrutalFighter(p) {
+  actx.save();
+  actx.translate(p.x, p.y);
+  actx.scale(p.dir, 1);
+
+  const t = Date.now() * 0.007;
+  const bounce = Math.sin(t * 3);
+
+  // Ground Shadow
+  actx.beginPath();
+  actx.ellipse(0, 2, 46 + bounce * 2, 13, 0, 0, Math.PI * 2);
+  actx.fillStyle = 'rgba(0,0,0,0.75)';
+  actx.fill();
+
+  let hipY = 66 + bounce * 3;
+  let spineAngle = 0.08 + Math.sin(t * 3) * 0.03;
+  let headAngle = -spineAngle * 0.6;
+
+  let leadThigh = 0.24 + bounce * 0.05;
+  let leadShin = -0.48 - bounce * 0.06;
+  let rearThigh = -0.26 + bounce * 0.04;
+  let rearShin = 0.38 + bounce * 0.05;
+
+  let leadArmUp = -1.15 + Math.sin(t * 3 + 0.4) * 0.06;
+  let leadArmFore = 1.65 + Math.cos(t * 3) * 0.08;
+  let rearArmUp = -1.45 + Math.cos(t * 3 + 0.2) * 0.05;
+  let rearArmFore = 1.85 + Math.sin(t * 3) * 0.06;
+
+  if (p.isGuarding) {
+    spineAngle = 0.28;
+    leadArmUp = -1.85; leadArmFore = 2.15;
+    rearArmUp = -1.95; rearArmFore = 2.25;
+    hipY = 54;
+  } else if (p.anim === 'punch') {
+    const prog = p.animTime / p.animMax;
+    if (prog < 0.45) {
+      const s = Math.sin(prog / 0.45 * Math.PI * 0.5);
+      spineAngle = 0.38 * s;
+      leadArmUp = -0.15 * s;
+      leadArmFore = 0.05 * s;
+    } else {
+      const r = (prog - 0.45) / 0.55;
+      spineAngle = 0.38 * (1 - r);
+      leadArmUp = -0.15 - r * 1.0;
+      leadArmFore = 0.05 + r * 1.6;
+    }
+  } else if (p.anim === 'headkick') {
+    const prog = p.animTime / p.animMax;
+    if (prog < 0.28) {
+      const c = prog / 0.28;
+      spineAngle = -0.38 * c;
+      leadThigh = -1.45 * c;
+      leadShin = 2.2 * c;
+      hipY = 74;
+    } else if (prog < 0.65) {
+      spineAngle = -0.72; // Deep counter-lean
+      leadThigh = -1.6;
+      leadShin = 0.1; // Snapped straight high whip
+      hipY = 80;
+    } else {
+      const r = (prog - 0.65) / 0.35;
+      spineAngle = -0.72 * (1 - r);
+      leadThigh = -1.6 + r * 1.84;
+      leadShin = 0.1 - r * 0.58;
+    }
+  } else if (p.anim === 'takedown') {
+    spineAngle = 0.7;
+    hipY = 40;
+    leadArmUp = 0.45; leadArmFore = 0.85;
+  } else if (p.anim === 'hurt') {
+    spineAngle = -0.45;
+    headAngle = -0.6;
+    leadArmUp = -0.8;
+  } else if (p.anim === 'down') {
+    actx.rotate(Math.PI / 2);
+    actx.translate(45, -15);
+  }
+
+  const skin = '#f8caa6';
+  const cornerCol = p.corner === 'red' ? '#dc2626' : '#0284c7';
+
+  // 1. Rear Leg
+  const rHipX = -10, rHipY = -hipY;
+  const rKneeX = rHipX + Math.sin(rearThigh) * 36;
+  const rKneeY = rHipY + Math.cos(rearThigh) * 36;
+  const rFootX = rKneeX + Math.sin(rearThigh + rearShin) * 34;
+  const rFootY = rKneeY + Math.cos(rearThigh + rearShin) * 34;
+  drawLimbInk(actx, rHipX, rHipY, rKneeX, rKneeY, 14, 11, skin);
+  drawLimbInk(actx, rKneeX, rKneeY, rFootX, rFootY, 11, 8, skin);
+  actx.fillStyle = cornerCol;
+  actx.fillRect(rFootX - 6, rFootY - 6, 12, 6);
+
+  // 2. Rear Arm
+  const chestX = Math.sin(spineAngle) * 38;
+  const chestY = -hipY - Math.cos(spineAngle) * 38;
+  const rShX = chestX - 12, rShY = chestY + 6;
+  const rElX = rShX + Math.cos(rearArmUp) * 28;
+  const rElY = rShY + Math.sin(rearArmUp) * 28;
+  const rGlX = rElX + Math.cos(rearArmUp + rearArmFore) * 26;
+  const rGlY = rElY + Math.sin(rearArmUp + rearArmFore) * 26;
+  drawLimbInk(actx, rShX, rShY, rElX, rElY, 10, 8, skin);
+  drawLimbInk(actx, rElX, rElY, rGlX, rGlY, 8, 7, skin);
+  actx.fillStyle = '#111827';
+  actx.beginPath();
+  actx.arc(rGlX, rGlY, 10, 0, Math.PI * 2);
+  actx.fill();
+  actx.stroke();
+
+  // 3. Torso & Fight Shorts
+  actx.save();
+  actx.translate(0, -hipY);
+  actx.rotate(spineAngle);
+
+  // Torso with Ink Stroke
+  actx.fillStyle = skin;
+  actx.strokeStyle = '#000';
+  actx.lineWidth = 3.5;
+  actx.beginPath();
+  actx.moveTo(-16, 2);
+  actx.quadraticCurveTo(-24, -22, -18, -46);
+  actx.lineTo(18, -46);
+  actx.quadraticCurveTo(24, -22, 16, 2);
+  actx.closePath();
+  actx.fill();
+  actx.stroke();
+
+  // Top or Abs
+  if (p === p1) {
+    actx.fillStyle = '#dc2626';
+    actx.fillRect(-18, -42, 36, 24);
+    actx.strokeRect(-18, -42, 36, 24);
+    actx.fillStyle = '#ffd700';
+    actx.font = 'bold 9px sans-serif';
+    actx.textAlign = 'center';
+    actx.fillText('VENUM', 0, -27);
+  } else {
+    // 6-pack & Blood Dripping on Chest
+    actx.strokeStyle = '#990011';
+    actx.lineWidth = 2.5;
+    actx.beginPath();
+    actx.arc(-8, -34, 8, 0, Math.PI);
+    actx.arc(8, -34, 8, 0, Math.PI);
+    actx.moveTo(0, -26); actx.lineTo(0, -6);
+    actx.moveTo(-7, -20); actx.lineTo(7, -20);
+    actx.moveTo(-7, -12); actx.lineTo(7, -12);
+    actx.stroke();
+  }
+
+  // Shorts
+  actx.fillStyle = p.corner === 'red' ? '#181a20' : '#0f172a';
+  actx.fillRect(-20, -6, 40, 36);
+  actx.strokeRect(-20, -6, 40, 36);
+
+  actx.fillStyle = cornerCol;
+  actx.fillRect(p.dir > 0 ? 12 : -18, -4, 6, 32);
+  actx.fillStyle = '#ffd700';
+  actx.font = 'bold 9px sans-serif';
+  actx.textAlign = 'center';
+  actx.fillText('UFC', 0, 18);
+
+  actx.restore();
+
+  // 4. Lead Leg
+  const lHipX = 8, lHipY = -hipY + 4;
+  const lKneeX = lHipX + Math.sin(leadThigh) * 38;
+  const lKneeY = lHipY + Math.cos(leadThigh) * 38;
+  const lFootX = lKneeX + Math.sin(leadThigh + leadShin) * 36;
+  const lFootY = lKneeY + Math.cos(leadThigh + leadShin) * 36;
+  drawLimbInk(actx, lHipX, lHipY, lKneeX, lKneeY, 15, 12, skin);
+  drawLimbInk(actx, lKneeX, lKneeY, lFootX, lFootY, 12, 9, skin);
+  actx.fillStyle = cornerCol;
+  actx.fillRect(lFootX - 6, lFootY - 6, 12, 6);
+
+  // 5. Head & Face (With Blood Damage)
+  const hx = chestX + Math.sin(headAngle) * 16;
+  const hy = chestY - Math.cos(headAngle) * 16;
+
+  actx.fillStyle = skin;
+  actx.strokeStyle = '#000';
+  actx.lineWidth = 3.5;
+  actx.beginPath();
+  actx.arc(hx, hy, 19, 0, Math.PI * 2);
+  actx.fill();
+  actx.stroke();
+
+  // Bloody Cuts & Bruises on Head
+  if (p.hp < 75) {
+    actx.fillStyle = '#ff0033';
+    actx.beginPath();
+    actx.arc(hx + 6, hy - 4, 3.5, 0, Math.PI * 2);
+    actx.fill();
+  }
+  if (p.hp < 40) {
+    // Blood dripping down face
+    actx.strokeStyle = '#b91c1c';
+    actx.lineWidth = 2.5;
+    actx.beginPath();
+    actx.moveTo(hx + 6, hy - 4);
+    actx.lineTo(hx + 5, hy + 12);
+    actx.stroke();
+  }
+
+  // Hair
+  if (p === p1) {
+    actx.fillStyle = '#1c1917';
+    actx.beginPath();
+    actx.arc(hx, hy - 4, 20, Math.PI, Math.PI * 2);
+    actx.fill();
+
+    // Ponytail
+    actx.strokeStyle = '#1c1917';
+    actx.lineWidth = 12;
+    actx.lineCap = 'round';
+    actx.beginPath();
+    actx.moveTo(hx - 10, hy - 8);
+    for (let i = 1; i < p.hair.length; i++) {
+      actx.lineTo(p.hair[i].x - p.x, p.hair[i].y - p.y);
+    }
+    actx.stroke();
+  } else {
+    actx.fillStyle = '#292524';
+    actx.beginPath();
+    actx.arc(hx, hy - 4, 20, Math.PI * 0.9, Math.PI * 2.1);
+    actx.fill();
+  }
+
+  // Eyes & Mouthguard
+  actx.fillStyle = '#000';
+  actx.fillRect(hx + 4, hy - 2, 4, 3);
+  if (p.anim === 'hurt' || p.anim === 'down') {
+    actx.font = 'bold 16px sans-serif';
+    actx.fillStyle = '#ff0033';
+    actx.fillText('✕', hx + 4, hy + 3);
+  }
+  actx.fillStyle = '#fff';
+  actx.fillRect(hx + 5, hy + 7, 7, 3);
+
+  // 6. Lead Arm
+  const lShX = chestX + 10, lShY = chestY + 8;
+  const lElX = lShX + Math.cos(leadArmUp) * 30;
+  const lElY = lShY + Math.sin(leadArmUp) * 30;
+  const lGlX = lElX + Math.cos(leadArmUp + leadArmFore) * 28;
+  const lGlY = lElY + Math.sin(leadArmUp + leadArmFore) * 28;
+  drawLimbInk(actx, lShX, lShY, lElX, lElY, 11, 9, skin);
+  drawLimbInk(actx, lElX, lElY, lGlX, lGlY, 9, 8, skin);
+
+  // Lead 4oz Glove with Corner Tape
+  actx.fillStyle = '#111827';
+  actx.strokeStyle = '#000';
+  actx.lineWidth = 3;
+  actx.beginPath();
+  actx.roundRect(lGlX - 8, lGlY - 10, 20, 20, 4);
+  actx.fill();
+  actx.stroke();
+
+  actx.fillStyle = cornerCol;
+  actx.fillRect(lGlX - 10, lGlY - 10, 5, 20);
+
+  actx.fillStyle = '#fff';
+  actx.font = 'bold 8px sans-serif';
+  actx.fillText('UFC', lGlX + 2, lGlY + 3);
+
+  actx.restore();
+}
+
+/* ── Bloodsport Octagon Environment ── */
+function renderBloodsportArena() {
+  // 1. Dark Red Sinister Ambient
+  const bgGrad = actx.createRadialGradient(W / 2, H * 0.25, 30, W / 2, H * 0.5, W * 0.7);
+  bgGrad.addColorStop(0, '#260a12');
+  bgGrad.addColorStop(1, '#050608');
+  actx.fillStyle = bgGrad;
+  actx.fillRect(0, 0, W, H);
+
+  // 2. Heavy Spotlights
+  const t = Date.now() * 0.001;
+  const sp1 = W * 0.35 + Math.sin(t) * 120;
+  const sp2 = W * 0.65 - Math.sin(t * 1.2) * 120;
+
+  const beam1 = actx.createLinearGradient(W * 0.2, 0, sp1, FLOOR_Y);
+  beam1.addColorStop(0, 'rgba(255, 0, 51, 0.22)');
+  beam1.addColorStop(1, 'rgba(255, 0, 51, 0.01)');
+  actx.fillStyle = beam1;
+  actx.beginPath();
+  actx.moveTo(W * 0.2 - 20, 0); actx.lineTo(W * 0.2 + 20, 0);
+  actx.lineTo(sp1 + 90, FLOOR_Y); actx.lineTo(sp1 - 90, FLOOR_Y);
+  actx.fill();
+
+  const beam2 = actx.createLinearGradient(W * 0.8, 0, sp2, FLOOR_Y);
+  beam2.addColorStop(0, 'rgba(6, 182, 212, 0.2)');
+  beam2.addColorStop(1, 'rgba(6, 182, 212, 0.01)');
+  actx.fillStyle = beam2;
+  actx.beginPath();
+  actx.moveTo(W * 0.8 - 20, 0); actx.lineTo(W * 0.8 + 20, 0);
+  actx.lineTo(sp2 + 90, FLOOR_Y); actx.lineTo(sp2 - 90, FLOOR_Y);
+  actx.fill();
+
+  // 3. Chain-Link Cage Mesh
+  actx.strokeStyle = 'rgba(50, 40, 45, 0.7)';
+  actx.lineWidth = 2.2;
+  for (let x = W * 0.05; x < W * 0.95; x += 20) {
+    actx.beginPath();
+    actx.moveTo(x, H * 0.18);
+    actx.lineTo(x + 20, FLOOR_Y);
+    actx.moveTo(x + 20, H * 0.18);
+    actx.lineTo(x, FLOOR_Y);
+    actx.stroke();
+  }
+
+  // Padded Foam Railing
+  actx.fillStyle = '#1c0f14';
+  actx.fillRect(W * 0.04, H * 0.17, W * 0.92, 14);
+  actx.strokeStyle = '#dc2626';
+  actx.lineWidth = 1.5;
+  actx.strokeRect(W * 0.04, H * 0.17, W * 0.92, 14);
+
+  // Corner Posts
+  actx.fillStyle = '#ff0033';
+  actx.fillRect(W * 0.04, H * 0.15, 20, FLOOR_Y - H * 0.15);
+  actx.fillStyle = '#00d4ff';
+  actx.fillRect(W * 0.96 - 20, H * 0.15, 20, FLOOR_Y - H * 0.15);
+
+  // 4. Octagon Canvas Mat Floor
+  actx.fillStyle = '#dcdfe6';
+  actx.fillRect(0, FLOOR_Y - 14, W, H);
+
+  // Mat Depth
+  const matGrad = actx.createLinearGradient(0, FLOOR_Y - 14, 0, H);
+  matGrad.addColorStop(0, 'rgba(0,0,0,0.12)');
+  matGrad.addColorStop(1, 'rgba(0,0,0,0.5)');
+  actx.fillStyle = matGrad;
+  actx.fillRect(0, FLOOR_Y - 14, W, H);
+
+  // Octagon Red Border
+  actx.strokeStyle = '#dc2626';
+  actx.lineWidth = 5;
+  actx.strokeRect(W * 0.06, FLOOR_Y - 10, W * 0.88, H - FLOOR_Y);
+
+  // Parody Sponsors on Canvas
+  actx.save();
+  actx.font = 'bold 22px "Teko", sans-serif';
+  actx.fillStyle = 'rgba(0,0,0,0.22)';
+  actx.textAlign = 'center';
+  actx.fillText('★ VỢ LÀ NHẤT FC ★', W * 0.22, FLOOR_Y + 38);
+  actx.fillText('★ TRÀ SỮA FULL TOPPING ★', W * 0.78, FLOOR_Y + 38);
+  actx.fillText('HAIDILAO HOTPOT', W * 0.5, FLOOR_Y + 76);
+
+  // Center UFC Logo
+  actx.translate(W / 2, FLOOR_Y + 30);
+  actx.scale(1, 0.42);
+  actx.beginPath();
+  actx.arc(0, 0, 115, 0, Math.PI * 2);
+  actx.strokeStyle = 'rgba(220, 38, 38, 0.4)';
+  actx.lineWidth = 8;
+  actx.stroke();
+
+  actx.font = 'bold 70px "Teko", sans-serif';
+  actx.fillStyle = 'rgba(220, 38, 38, 0.38)';
+  actx.fillText('UFC 300', 0, 22);
+  actx.restore();
+
+  // 5. Draw Massive Mat Blood Stains & Pools
+  floorBlood.forEach(b => {
+    actx.save();
+    actx.translate(b.x, b.y);
+    actx.rotate(b.rot);
+    actx.beginPath();
+    actx.ellipse(0, 0, b.radX, b.radY, 0, 0, Math.PI * 2);
+    actx.fillStyle = b.color;
+    actx.globalAlpha = b.alpha;
+    actx.fill();
+    actx.restore();
+  });
+  actx.globalAlpha = 1;
+}
+
+/* ── Screen Lens Blood Overlay (Máu chảy trên mặt kính) ── */
+function renderScreenLensBlood() {
+  lctx.clearRect(0, 0, W, H);
+
+  for (let i = lensBlood.length - 1; i >= 0; i--) {
+    const lb = lensBlood[i];
+
+    // Splatter blob
+    lctx.fillStyle = 'rgba(185, 28, 28, ' + lb.alpha + ')';
+    lctx.beginPath();
+    lctx.arc(lb.x, lb.y, lb.rad, 0, Math.PI * 2);
+    lctx.fill();
+
+    // Drip streak running down screen
+    if (lb.dripY < lb.maxDrip) {
+      lb.dripY += lb.dripSpeed;
+    }
+    lctx.strokeStyle = 'rgba(153, 0, 17, ' + (lb.alpha * 0.85) + ')';
+    lctx.lineWidth = lb.rad * 0.4;
+    lctx.lineCap = 'round';
+    lctx.beginPath();
+    lctx.moveTo(lb.x, lb.y);
+    lctx.lineTo(lb.x, lb.y + lb.dripY);
+    lctx.stroke();
+
+    // Fade slowly over time
+    lb.alpha -= 0.001;
+    if (lb.alpha <= 0) lensBlood.splice(i, 1);
+  }
+}
+
+/* ── Combat Moves Execution ── */
+function execPunchMove(att, def) {
+  if (att.anim !== 'idle') return;
+  att.setAnim('punch', 14);
+  att.stamina = Math.max(0, att.stamina - 6);
+  att.vx = att.dir * 5.5;
+  spawnSlash(att.x + att.dir * 30, att.y - 75, att.dir, '#ff0033');
+
+  const dist = Math.abs(att.x - def.x);
+  if (dist < 115) {
+    def.takeHit(12, 'punch', att);
+  } else {
+    playBloodyFx('punch');
+  }
+}
+
+function execHeadkickMove(att, def) {
+  if (att.anim !== 'idle') return;
+  att.setAnim('headkick', 22);
+  att.stamina = Math.max(0, att.stamina - 16);
+  att.vx = att.dir * 7.5;
+  spawnSlash(att.x + att.dir * 45, att.y - 85, att.dir, '#ff0033');
+
+  const dist = Math.abs(att.x - def.x);
+  if (dist < 145) {
+    def.takeHit(26, 'headkick', att);
+  } else {
+    playBloodyFx('punch');
+  }
+}
+
+function execTakedownMove(att, def) {
+  if (att.anim !== 'idle') return;
+  att.setAnim('takedown', 30);
+  att.stamina = Math.max(0, att.stamina - 24);
+  att.vx = att.dir * 12;
+
+  const dist = Math.abs(att.x - def.x);
+  if (dist < 125) {
+    def.y = FLOOR_Y;
+    def.takeHit(30, 'slam', att);
+  }
+}
+
+let subProgress = 0;
+let subTimer = null;
+function execChokeMove(att, def) {
+  if (att.anim !== 'idle') return;
+  const dist = Math.abs(att.x - def.x);
+  if (dist > 125) {
+    triggerRogan("<b>JOE ROGAN:</b> PHẢI ÁP SÁT ĐỐI THỦ MỚI SIẾT ĐƯỢC!");
+    return;
+  }
+
+  att.setAnim('submit', 180);
+  def.setAnim('hurt', 180);
+
+  subProgress = 25;
+  document.getElementById('subModal').classList.add('active');
+  triggerRogan("<b>JOE ROGAN:</b> ĐANG CỐ KHÓA SIẾT REAR-NAKED CHOKE!");
+  playBloodyFx('bloodSquirt');
+
+  clearInterval(subTimer);
+  subTimer = setInterval(() => {
+    subProgress -= 2;
+    document.getElementById('subFill').style.width = subProgress + '%';
+    if (subProgress <= 0) {
+      clearInterval(subTimer);
+      document.getElementById('subModal').classList.remove('active');
+      def.hp = 0;
+      def.setAnim('down', 999999);
+      finishBloodyFight(att, def, 'FATALITY (SIẾT CỔ NGHẸT THỞ)!');
+    }
+  }, 100);
+}
+
+document.getElementById('btnTapEscape').addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  subProgress += 18;
+  document.getElementById('subFill').style.width = Math.min(100, subProgress) + '%';
+  phoneVibe(40);
+  if (subProgress >= 100) {
+    clearInterval(subTimer);
+    document.getElementById('subModal').classList.remove('active');
+    p1.setAnim('idle', 0);
+    p2.setAnim('idle', 0);
+    p1.x -= p1.dir * 50;
+    triggerRogan("<b>JOE ROGAN:</b> THOÁT KHÓA SIẾT NGOẠN MỤC!");
+    playBloodyFx('slam');
+  }
+});
+
+/* ── Opponent AI ── */
+let aiTimer = 0;
+function updateAI() {
+  if (!isFightActive || p2.anim === 'down' || p2.anim === 'submit') return;
+
+  const dist = Math.abs(p1.x - p2.x);
+  aiTimer++;
+
+  if (aiTimer > 26) {
+    aiTimer = 0;
+    const roll = Math.random();
+
+    if (dist > 145) {
+      p2.vx = -p2.dir * 4.8;
+    } else if (dist < 110) {
+      if (roll < 0.45) {
+        execPunchMove(p2, p1);
+      } else if (roll < 0.72) {
+        p2.isGuarding = true;
+        p2.vx = p2.dir * 5;
+        setTimeout(() => { p2.isGuarding = false; }, 420);
+      } else if (roll < 0.9) {
+        execHeadkickMove(p2, p1);
+      }
+    }
+  }
+}
+
+/* ── Finish Match & Decision ── */
+let isFightActive = false;
+let clockInterval = null;
+let roundSecs = 300;
+
+function finishBloodyFight(winner, loser, method) {
+  isFightActive = false;
+  clearInterval(clockInterval);
+  playBloodyFx('bell');
+  phoneVibe([100, 80, 200, 100, 400]);
+
+  // Massive blood fountain on KO
+  eruptBloodFountain(loser.x, loser.y - 70, loser.dir, 'heavy');
+
+  document.getElementById('brutalityBanner').classList.add('show');
+
+  setTimeout(() => {
+    document.getElementById('brutalityBanner').classList.remove('show');
+    document.getElementById('koTitleTxt').textContent = method;
+    document.getElementById('koChampTxt').textContent = 
+      winner === p1 ? '🏆 BÉ QUYÊN GIỮ NGUYÊN ĐAI VÔ ĐỊCH! 👑' : '🏆 ANH YÊU THẮNG (ĐIỀU KỲ DIỆU)!';
+    
+    document.getElementById('koDecreeTxt').innerHTML = `
+      <b>BẢN ÁN TRỌNG TÀI SAU TRẬN ĐẪU ĐẪM MÁU:</b><br>
+      • Võ sĩ <b>${loser.name}</b> đã bị hạ Knockout đo sàn be bét máu!<br>
+      • <b>Hình phạt:</b> Nộp toàn bộ tiền lương tháng này cho Nóc Nhà.<br>
+      • Tối nay phải đèo Nóc Nhà đi ăn lẩu Haidilao & mua trà sữa trân châu full topping!
+    `;
+    document.getElementById('koModal').classList.add('active');
+  }, 1400);
+}
+
+function updateHUD() {
+  document.getElementById('redHp').style.width = p1.hp + '%';
+  document.getElementById('redLag').style.width = p1.lagHp + '%';
+  document.getElementById('blueHp').style.width = p2.hp + '%';
+  document.getElementById('blueLag').style.width = p2.lagHp + '%';
+  document.getElementById('redStamina').style.width = p1.stamina + '%';
+  document.getElementById('blueStamina').style.width = p2.stamina + '%';
+
+  const m = Math.floor(roundSecs / 60);
+  const s = roundSecs % 60;
+  document.getElementById('clockLbl').textContent = 
+    (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+const roganEl = document.getElementById('roganBanner');
+const comboEl = document.getElementById('comboBadge');
+let roganTimer = null, comboTimer = null;
+
+function triggerRogan(txt) {
+  clearTimeout(roganTimer);
+  roganEl.innerHTML = txt;
+  roganEl.classList.add('show');
+  roganTimer = setTimeout(() => roganEl.classList.remove('show'), 2200);
+}
+
+function showComboBadge(txt) {
+  clearTimeout(comboTimer);
+  comboEl.textContent = txt;
+  comboEl.classList.add('show');
+  comboTimer = setTimeout(() => comboEl.classList.remove('show'), 1200);
+}
+
+/* ── Main Game Loop ── */
+function gameLoop() {
+  if (hitStopFrames > 0) {
+    hitStopFrames--;
+  } else {
+    if (isFightActive) {
+      p1.update(p2);
+      p2.update(p1);
+      updateAI();
+      updateHUD();
+    }
+  }
+
+  // Camera Shake
+  actx.save();
+  actx.clearRect(0, 0, W, H);
+  if (cameraShake > 0) {
+    actx.translate((Math.random() - 0.5) * cameraShake, (Math.random() - 0.5) * cameraShake);
+    cameraShake *= 0.85;
+    if (cameraShake < 0.3) cameraShake = 0;
+  }
+
+  // 1. Octagon Floor & Cage
+  renderBloodsportArena();
+
+  // 2. Fighters
+  renderBrutalFighter(p2);
+  renderBrutalFighter(p1);
+
+  // 3. Flying Blood Drops
+  for (let i = flyingBlood.length - 1; i >= 0; i--) {
+    const b = flyingBlood[i];
+    b.x += b.vx;
+    b.y += b.vy;
+    b.vy += 0.55; // gravity
+    b.life -= 0.015;
+
+    actx.beginPath();
+    actx.arc(b.x, b.y, b.rad, 0, Math.PI * 2);
+    actx.fillStyle = b.color;
+    actx.globalAlpha = Math.max(0, b.life);
+    actx.fill();
+
+    // Splatter when hits floor
+    if (b.y >= FLOOR_Y - 5) {
+      floorBlood.push({
+        x: b.x,
+        y: b.y + Math.random() * 4,
+        radX: b.rad * 1.8,
+        radY: b.rad * 0.9,
+        rot: Math.random() * Math.PI,
+        color: b.color,
+        alpha: 0.8
+      });
+      flyingBlood.splice(i, 1);
+    } else if (b.life <= 0) {
+      flyingBlood.splice(i, 1);
+    }
+  }
+  actx.globalAlpha = 1;
+
+  // 4. Flying Teeth
+  for (let i = flyingTeeth.length - 1; i >= 0; i--) {
+    const tooth = flyingTeeth[i];
+    tooth.x += tooth.vx;
+    tooth.y += tooth.vy;
+    tooth.vy += 0.6;
+    tooth.rot += tooth.vrot;
+
+    actx.save();
+    actx.translate(tooth.x, tooth.y);
+    actx.rotate(tooth.rot);
+    actx.fillStyle = '#fff';
+    actx.strokeStyle = '#990011';
+    actx.lineWidth = 1.5;
+    actx.beginPath();
+    actx.roundRect(-4, -6, 8, 12, 3);
+    actx.fill();
+    actx.stroke();
+    actx.restore();
+
+    if (tooth.y > FLOOR_Y + 10) flyingTeeth.splice(i, 1);
+  }
+
+  // 5. Slash Arcs
+  for (let i = slashArcs.length - 1; i >= 0; i--) {
+    const sl = slashArcs[i];
+    actx.save();
+    actx.translate(sl.x, sl.y);
+    actx.beginPath();
+    actx.arc(0, 0, sl.radius, sl.angle, sl.angle + Math.PI * 0.7);
+    actx.strokeStyle = sl.color;
+    actx.lineWidth = 7;
+    actx.globalAlpha = sl.alpha;
+    actx.stroke();
+    actx.restore();
+
+    sl.alpha -= sl.decay;
+    if (sl.alpha <= 0) slashArcs.splice(i, 1);
+  }
+
+  actx.restore();
+
+  // Render Lens Blood Drops on Top
+  renderScreenLensBlood();
+
+  requestAnimationFrame(gameLoop);
+}
+requestAnimationFrame(gameLoop);
+
+/* ── Mobile Touch Controls ── */
+function bindButton(id, downFn, upFn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    getAudio();
+    el.classList.add('active');
+    if (downFn) downFn();
+  });
+  el.addEventListener('pointerup', (e) => {
+    e.preventDefault();
+    el.classList.remove('active');
+    if (upFn) upFn();
+  });
+  el.addEventListener('pointerleave', (e) => {
+    el.classList.remove('active');
+    if (upFn) upFn();
+  });
+}
+
+bindButton('btnLeft', 
+  () => { p1.vx = -6.0; }, 
+  () => { if (p1.anim === 'stride') p1.setAnim('idle', 0); }
+);
+bindButton('btnRight', 
+  () => { p1.vx = 6.0; }, 
+  () => { if (p1.anim === 'stride') p1.setAnim('idle', 0); }
+);
+bindButton('btnUp', () => {
+  if (p1.y >= FLOOR_Y - 1) {
+    p1.vy = -14.8;
+    playBloodyFx('punch');
+    phoneVibe(20);
+  }
+});
+bindButton('btnDown', 
+  () => { p1.isGuarding = true; }, 
+  () => { p1.isGuarding = false; }
+);
+
+bindButton('actPunch', () => execPunchMove(p1, p2));
+bindButton('actHeadkick', () => execHeadkickMove(p1, p2));
+bindButton('actTakedown', () => execTakedownMove(p1, p2));
+bindButton('actChoke', () => execChokeMove(p1, p2));
+
+// Keyboard fallback
+window.addEventListener('keydown', (e) => {
+  getAudio();
+  if (e.key === 'ArrowLeft' || e.key === 'a') p1.vx = -6.0;
+  if (e.key === 'ArrowRight' || e.key === 'd') p1.vx = 6.0;
+  if ((e.key === 'ArrowUp' || e.key === 'w') && p1.y >= FLOOR_Y - 1) p1.vy = -14.8;
+  if (e.key === 'ArrowDown' || e.key === 's') p1.isGuarding = true;
+  if (e.key === 'j' || e.key === '1') execPunchMove(p1, p2);
+  if (e.key === 'k' || e.key === '2') execHeadkickMove(p1, p2);
+  if (e.key === 'l' || e.key === '3') execTakedownMove(p1, p2);
+  if (e.key === 'u' || e.key === '4') execChokeMove(p1, p2);
+});
+window.addEventListener('keyup', (e) => {
+  if (e.key === 'ArrowDown' || e.key === 's') p1.isGuarding = false;
+});
+
+/* ── Enter Octagon ── */
+document.getElementById('btnEnterOctagon').addEventListener('click', () => {
+  getAudio();
+  playBloodyFx('bell');
+  document.getElementById('totModal').classList.add('hide');
+  isFightActive = true;
+
+  clearInterval(clockInterval);
+  clockInterval = setInterval(() => {
+    if (!isFightActive) return;
+    roundSecs--;
+    if (roundSecs <= 0) {
+      clearInterval(clockInterval);
+      finishBloodyFight(p1, p2, 'QUYẾT ĐỊNH ĐỒNG THUẬN TỪ TRỌNG TÀI');
+    }
+  }, 1000);
+
+  triggerRogan("<b>BRUCE BUFFER:</b> IT'S TIIIIIME! TRẬN CHIẾN ĐẪM MÁU BẮT ĐẦU!");
+});
+
+/* ── Rematch ── */
+document.getElementById('btnReplay').addEventListener('click', () => {
+  p1.hp = 100; p1.lagHp = 100; p1.stamina = 100; p1.setAnim('idle', 0); p1.x = W * 0.3;
+  p2.hp = 100; p2.lagHp = 100; p2.stamina = 100; p2.setAnim('idle', 0); p2.x = W * 0.7;
+  floorBlood.length = 0;
+  flyingBlood.length = 0;
+  lensBlood.length = 0;
+  flyingTeeth.length = 0;
+  document.getElementById('brutalVignette').classList.remove('active');
+  document.getElementById('koModal').classList.remove('active');
+  roundSecs = 300;
+  isFightActive = true;
+  playBloodyFx('bell');
+  triggerRogan("<b>BRUCE BUFFER:</b> HIỆP ĐẤU PHỤC THÙ ĐẪM MÁU BẮT ĐẦU!");
+});
+</script>
+</body>
+</html>
